@@ -1,6 +1,5 @@
 import React from 'react'
 import { ChainBlockData } from '../types'
-import { formatTimestamp } from '../utils/formatters'
 import { AnimatedCounter } from './AnimatedCounter'
 
 interface ChainTableProps {
@@ -15,31 +14,12 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
     return (
       <div className="chain-table">
         <div className="table-header">
-          <div className="header-cell">
-            <span className="sort-icon">⌄</span> Network
-          </div>
-          <div className="header-cell">
-            <span className="sort-icon">⌄</span> Block
-          </div>
-          <div className="header-cell">
-            <span className="sort-icon">⌄</span> TPS
-          </div>
-          <div className="header-cell">
-            <span className="sort-icon">⌄</span> Mgas/s
-          </div>
-          <div className="header-cell">
-            <span className="sort-icon">⌄</span> Network Util
-          </div>
-          <div className="header-cell">
-            <span className="sort-icon">⌄</span> Stack
-          </div>
-          <div className="header-cell">
-            <span className="sort-icon">⌄</span> Gas Limit
-          </div>
-          <div className="header-cell">
-            <span className="sort-icon">⌄</span> Utilization
-          </div>
-          <div className="header-cell">Last Updated</div>
+          <div className="header-cell sortable">✧ Network</div>
+          <div className="header-cell sortable">✧ Block</div>
+          <div className="header-cell sortable">✧ TPS</div>
+          <div className="header-cell sortable">✧ Mgas/s</div>
+          <div className="header-cell sortable">✧ KB/s</div>
+          <div className="header-cell sortable">✧ Stack</div>
         </div>
         <div className="loading-row">Loading chain data...</div>
       </div>
@@ -50,65 +30,40 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
     return (
       <div className="chain-table">
         <div className="table-header">
-          <div className="header-cell">
-            <span className="sort-icon">⌄</span> Network
-          </div>
-          <div className="header-cell">
-            <span className="sort-icon">⌄</span> Block
-          </div>
-          <div className="header-cell">
-            <span className="sort-icon">⌄</span> TPS
-          </div>
-          <div className="header-cell">
-            <span className="sort-icon">⌄</span> Mgas/s
-          </div>
-          <div className="header-cell">
-            <span className="sort-icon">⌄</span> Network Util
-          </div>
-          <div className="header-cell">
-            <span className="sort-icon">⌄</span> Stack
-          </div>
-          <div className="header-cell">
-            <span className="sort-icon">⌄</span> Gas Limit
-          </div>
-          <div className="header-cell">
-            <span className="sort-icon">⌄</span> Utilization
-          </div>
-          <div className="header-cell">Last Updated</div>
+          <div className="header-cell sortable">✧ Network</div>
+          <div className="header-cell sortable">✧ Block</div>
+          <div className="header-cell sortable">✧ TPS</div>
+          <div className="header-cell sortable">✧ Mgas/s</div>
+          <div className="header-cell sortable">✧ KB/s</div>
+          <div className="header-cell sortable">✧ Stack</div>
         </div>
         <div className="no-data">No data available</div>
       </div>
     )
   }
 
+  // Find highest TPS chain for highlighting
+  let highestTpsId = ''
+  let highestTps = 0
+  chainData.forEach(chain => {
+    if (chain.blockData && !chain.loading && !chain.error) {
+      const tps = chain.blockData.transactions.length / 2
+      if (tps > highestTps) {
+        highestTps = tps
+        highestTpsId = chain.blockchainId
+      }
+    }
+  })
+
   return (
     <div className="chain-table">
       <div className="table-header">
-        <div className="header-cell">
-          <span className="sort-icon">⌄</span> Network
-        </div>
-        <div className="header-cell">
-          <span className="sort-icon">⌄</span> Block
-        </div>
-        <div className="header-cell">
-          <span className="sort-icon">⌄</span> TPS
-        </div>
-        <div className="header-cell">
-          <span className="sort-icon">⌄</span> Mgas/s
-        </div>
-        <div className="header-cell">
-          <span className="sort-icon">⌄</span> Network Util
-        </div>
-        <div className="header-cell">
-          <span className="sort-icon">⌄</span> Stack
-        </div>
-        <div className="header-cell">
-          <span className="sort-icon">⌄</span> Gas Limit
-        </div>
-        <div className="header-cell">
-          <span className="sort-icon">⌄</span> Utilization
-        </div>
-        <div className="header-cell">Last Updated</div>
+        <div className="header-cell sortable">✧ Network</div>
+        <div className="header-cell sortable">✧ Block</div>
+        <div className="header-cell sortable">✧ TPS</div>
+        <div className="header-cell sortable">✧ Mgas/s ^</div>
+        <div className="header-cell sortable">✧ KB/s</div>
+        <div className="header-cell sortable">✧ Stack</div>
       </div>
 
       {chainData.map((chain) => {
@@ -118,14 +73,11 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
               <div className="cell network-cell">
                 <span className="network-name">{chain.chainName}</span>
               </div>
-              <div className="cell">Loading...</div>
-              <div className="cell">--</div>
-              <div className="cell">--</div>
-              <div className="cell">--</div>
-              <div className="cell">--</div>
-              <div className="cell">--</div>
-              <div className="cell">--</div>
-              <div className="cell">--</div>
+              <div className="cell numeric-cell">...</div>
+              <div className="cell numeric-cell">-</div>
+              <div className="cell numeric-cell">-</div>
+              <div className="cell numeric-cell">-</div>
+              <div className="cell">avalanche-l1</div>
             </div>
           )
         }
@@ -136,16 +88,9 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
               <div className="cell network-cell">
                 <span className="network-name">{chain.chainName}</span>
               </div>
-              <div className="cell error-cell">
-                Error: {chain.error}
+              <div className="cell error-cell" style={{ gridColumn: 'span 5' }}>
+                Error
               </div>
-              <div className="cell">--</div>
-              <div className="cell">--</div>
-              <div className="cell">--</div>
-              <div className="cell">--</div>
-              <div className="cell">--</div>
-              <div className="cell">--</div>
-              <div className="cell">--</div>
             </div>
           )
         }
@@ -156,56 +101,42 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
               <div className="cell network-cell">
                 <span className="network-name">{chain.chainName}</span>
               </div>
-              <div className="cell">No data</div>
-              <div className="cell">--</div>
-              <div className="cell">--</div>
-              <div className="cell">--</div>
-              <div className="cell">--</div>
-              <div className="cell">--</div>
-              <div className="cell">--</div>
-              <div className="cell">--</div>
+              <div className="cell numeric-cell">-</div>
+              <div className="cell numeric-cell">-</div>
+              <div className="cell numeric-cell">-</div>
+              <div className="cell numeric-cell">-</div>
+              <div className="cell">avalanche-l1</div>
             </div>
           )
         }
 
         const blockNumber = parseInt(chain.blockData.number, 16)
-        const gasUsed = parseInt(chain.blockData.gasUsed, 16) / 1000000 // Convert to Mgas
+        const gasUsed = parseInt(chain.blockData.gasUsed, 16)
+        const blockSize = parseInt(chain.blockData.size, 16)
         const tps = chain.blockData.transactions.length / 2 // Assuming 2 second block time
-        const timestamp = parseInt(chain.blockData.timestamp, 16)
-        const gasLimit = parseInt(chain.blockData.gasLimit, 16) / 1000000 // Convert to Mgas
+        const mgasPerSecond = (gasUsed / 1000000) / 2 // Mgas per second (assuming 2s blocks)
+        const kbPerSecond = (blockSize / 1024) / 2 // KB per second (assuming 2s blocks)
 
-        // Calculate block utilization percentage
-        const gasUsedRaw = parseInt(chain.blockData.gasUsed, 16)
-        const gasLimitRaw = parseInt(chain.blockData.gasLimit, 16)
-        const utilization = (gasUsedRaw / gasLimitRaw) * 100
+        const isHighlighted = chain.blockchainId === highestTpsId && highestTps > 0
 
         return (
-          <div key={chain.blockchainId} className="table-row">
+          <div key={chain.blockchainId} className={`table-row ${isHighlighted ? 'highlighted' : ''}`}>
             <div className="cell network-cell">
               <span className="network-name">{chain.chainName}</span>
             </div>
             <div className="cell numeric-cell">
-              #<AnimatedCounter value={blockNumber} decimals={0} />
+              <AnimatedCounter value={blockNumber} decimals={0} />
             </div>
             <div className="cell numeric-cell">
               <AnimatedCounter value={tps} decimals={1} />
             </div>
             <div className="cell numeric-cell">
-              <AnimatedCounter value={gasUsed} decimals={2} />
+              <AnimatedCounter value={mgasPerSecond} decimals={2} />
             </div>
             <div className="cell numeric-cell">
-              <AnimatedCounter value={utilization} decimals={1} />%
+              <AnimatedCounter value={kbPerSecond} decimals={2} />
             </div>
-            <div className="cell">
-              Avalanche L1
-            </div>
-            <div className="cell numeric-cell">
-              <AnimatedCounter value={gasLimit} decimals={1} />M
-            </div>
-            <div className="cell numeric-cell">
-              <AnimatedCounter value={utilization} decimals={1} />%
-            </div>
-            <div className="cell timestamp-cell">{formatTimestamp(timestamp)}</div>
+            <div className="cell">avalanche-l1</div>
           </div>
         )
       })}
