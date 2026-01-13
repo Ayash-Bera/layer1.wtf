@@ -15,17 +15,5 @@ import chainsData from './chains.json'
 
 export const chains: Chain[] = chainsData
 
-// Get chains that have debug enabled and have an EVM chain ID (can use the new RPC API)
-export const getActiveChains = () => chains.filter(chain => 
-  chain.evmChainId && chain.rpcUrl && (
-    chain.debugEnabled || 
-    chain.chainName === 'C-Chain' ||
-    chain.chainName === 'DFK Chain' ||
-    chain.chainName === 'dexalotevm' ||
-    chain.chainName === 'shrapnelnetwork' ||
-    chain.chainName === 'beam' ||
-    chain.chainName === 'PLAYA3ULL' ||
-    chain.chainName === 'Pulsar' ||
-    chain.chainName === 'Lamina1'
-  )
-)
+// Get chains that have an EVM chain ID and RPC URL (include both debugEnabled true and false)
+export const getActiveChains = () => chains.filter(chain => chain.evmChainId && chain.rpcUrl)

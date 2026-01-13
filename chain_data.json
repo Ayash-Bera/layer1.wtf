@@ -1,0 +1,619 @@
+[
+  {
+    "name": "AIBTRUST",
+    "evmChainId": 80000,
+    "rpcUrls": []
+  },
+  {
+    "name": "Animalia",
+    "evmChainId": 8787,
+    "rpcUrls": []
+  },
+  {
+    "name": "Apertum",
+    "evmChainId": 2786,
+    "rpcUrls": []
+  },
+  {
+    "name": "Artery",
+    "evmChainId": 4313,
+    "rpcUrls": []
+  },
+  {
+    "name": "C-Chain",
+    "evmChainId": 43114,
+    "rpcUrls": [
+      "https://api.avax.network/ext/bc/C/rpc"
+    ]
+  },
+  {
+    "name": "X-Chain",
+    "evmChainId": null,
+    "rpcUrls": []
+  },
+  {
+    "name": "P-Chain",
+    "evmChainId": null,
+    "rpcUrls": []
+  },
+  {
+    "name": "BANGO",
+    "evmChainId": 5506,
+    "rpcUrls": []
+  },
+  {
+    "name": "beam",
+    "evmChainId": 4337,
+    "rpcUrls": [
+      "https://subnets.avax.network/beam/mainnet/rpc"
+    ]
+  },
+  {
+    "name": "Blaze",
+    "evmChainId": 46975,
+    "rpcUrls": []
+  },
+  {
+    "name": "BLITZ SUBNET",
+    "evmChainId": 1344,
+    "rpcUrls": [
+      "https://subnets.avax.network/blitz/mainnet/rpc"
+    ]
+  },
+  {
+    "name": "Blockticity",
+    "evmChainId": 28530,
+    "rpcUrls": []
+  },
+  {
+    "name": "Bloodloop",
+    "evmChainId": 578,
+    "rpcUrls": []
+  },
+  {
+    "name": "CertaLink",
+    "evmChainId": 2053,
+    "rpcUrls": []
+  },
+  {
+    "name": "cloudverse",
+    "evmChainId": 33210,
+    "rpcUrls": []
+  },
+  {
+    "name": "CodeNekt",
+    "evmChainId": 235235,
+    "rpcUrls": []
+  },
+  {
+    "name": "Coqnet",
+    "evmChainId": 42069,
+    "rpcUrls": []
+  },
+  {
+    "name": "CX",
+    "evmChainId": 737373,
+    "rpcUrls": [
+      "https://subnets.avax.network/cx/mainnet/rpc"
+    ]
+  },
+  {
+    "name": "D Chain",
+    "evmChainId": null,
+    "rpcUrls": []
+  },
+  {
+    "name": "DComm",
+    "evmChainId": 326663,
+    "rpcUrls": []
+  },
+  {
+    "name": "Deboard",
+    "evmChainId": 29732,
+    "rpcUrls": []
+  },
+  {
+    "name": "delaunch",
+    "evmChainId": 96786,
+    "rpcUrls": []
+  },
+  {
+    "name": "Deraalpha",
+    "evmChainId": 20250320,
+    "rpcUrls": []
+  },
+  {
+    "name": "dexalotevm",
+    "evmChainId": 432204,
+    "rpcUrls": [
+      "https://subnets.avax.network/dexalot/mainnet/rpc"
+    ]
+  },
+  {
+    "name": "DFK Chain",
+    "evmChainId": 53935,
+    "rpcUrls": [
+      "https://subnets.avax.network/defi-kingdoms/dfk-chain/rpc"
+    ]
+  },
+  {
+    "name": "Dinari Financial Network",
+    "evmChainId": 202110,
+    "rpcUrls": []
+  },
+  {
+    "name": "DOS Chain",
+    "evmChainId": 7979,
+    "rpcUrls": []
+  },
+  {
+    "name": "emdxSubnet",
+    "evmChainId": null,
+    "rpcUrls": []
+  },
+  {
+    "name": "EthixEtx",
+    "evmChainId": 389,
+    "rpcUrls": []
+  },
+  {
+    "name": "ETO Mainnet",
+    "evmChainId": null,
+    "rpcUrls": []
+  },
+  {
+    "name": "EVEN",
+    "evmChainId": 33345,
+    "rpcUrls": []
+  },
+  {
+    "name": "feature",
+    "evmChainId": 33311,
+    "rpcUrls": []
+  },
+  {
+    "name": "FIFA",
+    "evmChainId": 13322,
+    "rpcUrls": [
+      "https://subnets.avax.network/fifa/mainnet/rpc"
+    ]
+  },
+  {
+    "name": "FRQTAL",
+    "evmChainId": 62789,
+    "rpcUrls": []
+  },
+  {
+    "name": "Good Care",
+    "evmChainId": 741741,
+    "rpcUrls": []
+  },
+  {
+    "name": "greendot",
+    "evmChainId": 6765897101,
+    "rpcUrls": [
+      "https://subnets.avax.network/greendot/mainnet/rpc"
+    ]
+  },
+  {
+    "name": "Growfitter",
+    "evmChainId": 7084,
+    "rpcUrls": []
+  },
+  {
+    "name": "GUNZ",
+    "evmChainId": 43419,
+    "rpcUrls": [
+      "https://subnets.avax.network/gunzilla/mainnet/rpc"
+    ]
+  },
+  {
+    "name": "gunzilla",
+    "evmChainId": 43512,
+    "rpcUrls": []
+  },
+  {
+    "name": "Hashfire",
+    "evmChainId": 7272,
+    "rpcUrls": []
+  },
+  {
+    "name": "Hatchyverse",
+    "evmChainId": 8198,
+    "rpcUrls": []
+  },
+  {
+    "name": "Henesys",
+    "evmChainId": 68414,
+    "rpcUrls": [
+      "https://henesys-rpc.msu.io"
+    ]
+  },
+  {
+    "name": "HighOctane",
+    "evmChainId": 1853,
+    "rpcUrls": []
+  },
+  {
+    "name": "hubblenet",
+    "evmChainId": 1992,
+    "rpcUrls": []
+  },
+  {
+    "name": "huntingparty",
+    "evmChainId": null,
+    "rpcUrls": []
+  },
+  {
+    "name": "InnovoMarketsMainnet",
+    "evmChainId": 10036,
+    "rpcUrls": []
+  },
+  {
+    "name": "IntainMarkets",
+    "evmChainId": 151122,
+    "rpcUrls": []
+  },
+  {
+    "name": "intersect",
+    "evmChainId": 1216,
+    "rpcUrls": []
+  },
+  {
+    "name": "Kalichain",
+    "evmChainId": 6533,
+    "rpcUrls": []
+  },
+  {
+    "name": "KOROSHI",
+    "evmChainId": 379,
+    "rpcUrls": []
+  },
+  {
+    "name": "Lamina1",
+    "evmChainId": 10849,
+    "rpcUrls": [
+      "https://subnets.avax.network/lamina1/mainnet/rpc"
+    ]
+  },
+  {
+    "name": "Lamina1Identity",
+    "evmChainId": 10850,
+    "rpcUrls": []
+  },
+  {
+    "name": "Letsbuyhealthcare",
+    "evmChainId": 50776,
+    "rpcUrls": []
+  },
+  {
+    "name": "Loco Legends",
+    "evmChainId": null,
+    "rpcUrls": []
+  },
+  {
+    "name": "Loyal",
+    "evmChainId": 72379,
+    "rpcUrls": []
+  },
+  {
+    "name": "Lucid",
+    "evmChainId": 62521,
+    "rpcUrls": []
+  },
+  {
+    "name": "MartianChain",
+    "evmChainId": 2027,
+    "rpcUrls": []
+  },
+  {
+    "name": "MasaNetwork",
+    "evmChainId": 13396,
+    "rpcUrls": [
+      "https://subnets.avax.network/masanetwork/mainnet/rpc"
+    ]
+  },
+  {
+    "name": "meld",
+    "evmChainId": 333000333,
+    "rpcUrls": [
+      "https://subnets.avax.network/meld/mainnet/rpc"
+    ]
+  },
+  {
+    "name": "Memoria",
+    "evmChainId": 1888,
+    "rpcUrls": []
+  },
+  {
+    "name": "mintara",
+    "evmChainId": 1080,
+    "rpcUrls": []
+  },
+  {
+    "name": "Mirai",
+    "evmChainId": 2718,
+    "rpcUrls": []
+  },
+  {
+    "name": "MUGEN",
+    "evmChainId": 29111,
+    "rpcUrls": []
+  },
+  {
+    "name": "numbersevm",
+    "evmChainId": 10507,
+    "rpcUrls": []
+  },
+  {
+    "name": "numine",
+    "evmChainId": 8021,
+    "rpcUrls": [
+      "https://subnets.avax.network/numi/mainnet/rpc"
+    ]
+  },
+  {
+    "name": "OMOCHI",
+    "evmChainId": 5041,
+    "rpcUrls": []
+  },
+  {
+    "name": "ONIGIRI",
+    "evmChainId": 5040,
+    "rpcUrls": [
+      "https://subnets.avax.network/onigiri/mainnet/rpc"
+    ]
+  },
+  {
+    "name": "Orange",
+    "evmChainId": 1510,
+    "rpcUrls": []
+  },
+  {
+    "name": "Oumla",
+    "evmChainId": 58166,
+    "rpcUrls": []
+  },
+  {
+    "name": "PandaSea",
+    "evmChainId": 7776,
+    "rpcUrls": []
+  },
+  {
+    "name": "PLAYA3ULL",
+    "evmChainId": 3011,
+    "rpcUrls": [
+      "https://subnets.avax.network/playa3ull/mainnet/rpc"
+    ]
+  },
+  {
+    "name": "PlaydappNetwork",
+    "evmChainId": 504441,
+    "rpcUrls": [
+      "https://subnets.avax.network/playdappne/mainnet/rpc"
+    ]
+  },
+  {
+    "name": "PLYRPHI",
+    "evmChainId": 16180,
+    "rpcUrls": [
+      "https://subnets.avax.network/plyr/mainnet/rpc"
+    ]
+  },
+  {
+    "name": "Pulsar",
+    "evmChainId": 357,
+    "rpcUrls": [
+      "https://subnets.avax.network/pulsar/mainnet/rpc"
+    ]
+  },
+  {
+    "name": "QCHAIN",
+    "evmChainId": 12150,
+    "rpcUrls": []
+  },
+  {
+    "name": "QIMMP",
+    "evmChainId": 89043,
+    "rpcUrls": []
+  },
+  {
+    "name": "QR0215Y1MP",
+    "evmChainId": null,
+    "rpcUrls": []
+  },
+  {
+    "name": "QR0719T1MS",
+    "evmChainId": 936903,
+    "rpcUrls": []
+  },
+  {
+    "name": "QR0830T1MS",
+    "evmChainId": 931499,
+    "rpcUrls": []
+  },
+  {
+    "name": "QRTMS",
+    "evmChainId": 77757,
+    "rpcUrls": []
+  },
+  {
+    "name": "REALLY",
+    "evmChainId": 64273,
+    "rpcUrls": [
+      "https://subnets.avax.network/really/mainnet/rpc"
+    ]
+  },
+  {
+    "name": "Rymedi Compliance Subnet",
+    "evmChainId": 111003001,
+    "rpcUrls": []
+  },
+  {
+    "name": "Rymedi Identity Subnet",
+    "evmChainId": 111001001,
+    "rpcUrls": []
+  },
+  {
+    "name": "Rymedi Transaction Subnet",
+    "evmChainId": 111002001,
+    "rpcUrls": []
+  },
+  {
+    "name": "shrapnelnetwork",
+    "evmChainId": 2044,
+    "rpcUrls": [
+      "https://subnets.avax.network/shrapnel/mainnet/rpc"
+    ]
+  },
+  {
+    "name": "solert",
+    "evmChainId": 9899,
+    "rpcUrls": []
+  },
+  {
+    "name": "Space",
+    "evmChainId": 8227,
+    "rpcUrls": [
+      "https://subnets.avax.network/space/mainnet/rpc"
+    ]
+  },
+  {
+    "name": "StepNetwork",
+    "evmChainId": 1234,
+    "rpcUrls": []
+  },
+  {
+    "name": "StraitsX",
+    "evmChainId": 5566,
+    "rpcUrls": [
+      "https://subnets.avax.network/straitsx/mainnet/rpc"
+    ]
+  },
+  {
+    "name": "subnetsio",
+    "evmChainId": null,
+    "rpcUrls": []
+  },
+  {
+    "name": "Swimmer",
+    "evmChainId": null,
+    "rpcUrls": []
+  },
+  {
+    "name": "TeamMainnet10101017",
+    "evmChainId": null,
+    "rpcUrls": []
+  },
+  {
+    "name": "teleportersubnet1",
+    "evmChainId": 62707,
+    "rpcUrls": []
+  },
+  {
+    "name": "teleportersubnet2",
+    "evmChainId": 70953,
+    "rpcUrls": []
+  },
+  {
+    "name": "BnryMainnet",
+    "evmChainId": 836,
+    "rpcUrls": []
+  },
+  {
+    "name": "The Growth Protocol",
+    "evmChainId": 61587,
+    "rpcUrls": []
+  },
+  {
+    "name": "The LYLTY Economy",
+    "evmChainId": 17177,
+    "rpcUrls": []
+  },
+  {
+    "name": "Tiltyard",
+    "evmChainId": 710420,
+    "rpcUrls": [
+      "https://subnets.avax.network/tiltyard/mainnet/rpc"
+    ]
+  },
+  {
+    "name": "TITANL",
+    "evmChainId": 84358,
+    "rpcUrls": []
+  },
+  {
+    "name": "Tixbase",
+    "evmChainId": 13790,
+    "rpcUrls": []
+  },
+  {
+    "name": "toki",
+    "evmChainId": null,
+    "rpcUrls": []
+  },
+  {
+    "name": "TradeX Market",
+    "evmChainId": 21024,
+    "rpcUrls": []
+  },
+  {
+    "name": "TurfNetwork",
+    "evmChainId": 62334,
+    "rpcUrls": []
+  },
+  {
+    "name": "ULALO",
+    "evmChainId": 237007,
+    "rpcUrls": []
+  },
+  {
+    "name": "UPTN",
+    "evmChainId": 6119,
+    "rpcUrls": [
+      "https://node-api.uptn.io/v1/ext/rpc"
+    ]
+  },
+  {
+    "name": "Warp",
+    "evmChainId": 299792,
+    "rpcUrls": []
+  },
+  {
+    "name": "Watr",
+    "evmChainId": 192,
+    "rpcUrls": []
+  },
+  {
+    "name": "Wow",
+    "evmChainId": 98968,
+    "rpcUrls": []
+  },
+  {
+    "name": "WrapTag",
+    "evmChainId": null,
+    "rpcUrls": []
+  },
+  {
+    "name": "XANA Chain",
+    "evmChainId": 8888,
+    "rpcUrls": []
+  },
+  {
+    "name": "XplusSocialChain",
+    "evmChainId": null,
+    "rpcUrls": []
+  },
+  {
+    "name": "Youmio",
+    "evmChainId": 61360,
+    "rpcUrls": []
+  },
+  {
+    "name": "zerooneMainnet",
+    "evmChainId": 27827,
+    "rpcUrls": [
+      "https://subnets.avax.network/zeroonemai/mainnet/rpc"
+    ]
+  }
+]

@@ -22,6 +22,33 @@ export default defineConfig({
             console.log('Received Response from the Target:', proxyRes.statusCode, req.url);
           });
         },
+      },
+      '/api/proxy/uptn': {
+        target: 'https://node-api.uptn.io',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/proxy\/uptn/, '/v1/ext/rpc'),
+        secure: true,
+        ws: false,
+        configure: (proxy, _options) => {
+          proxy.on('proxyReq', (proxyReq, req, _res) => {
+            // Make it look like a direct request
+            proxyReq.setHeader('Host', 'node-api.uptn.io');
+            proxyReq.setHeader('Origin', 'https://node-api.uptn.io');
+            proxyReq.setHeader('Referer', 'https://node-api.uptn.io/');
+            proxyReq.setHeader('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
+            // Remove proxy identification headers
+            proxyReq.removeHeader('x-forwarded-for');
+            proxyReq.removeHeader('x-forwarded-host');
+            proxyReq.removeHeader('x-forwarded-proto');
+            proxyReq.removeHeader('via');
+          });
+          proxy.on('proxyRes', (proxyRes, req, _res) => {
+            // Add CORS headers
+            proxyRes.headers['access-control-allow-origin'] = '*';
+            proxyRes.headers['access-control-allow-methods'] = 'POST, GET, OPTIONS';
+            proxyRes.headers['access-control-allow-headers'] = 'Content-Type, Accept';
+          });
+        },
       }
     },
   },

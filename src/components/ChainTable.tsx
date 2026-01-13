@@ -1,5 +1,4 @@
 import React from 'react'
-import { useMemo, useEffect, useState } from 'react'
 import { ChainBlockData } from '../types'
 import { formatTimestamp } from '../utils/formatters'
 import { AnimatedCounter } from './AnimatedCounter'
@@ -10,34 +9,7 @@ interface ChainTableProps {
   onRefresh: () => void
 }
 
-interface StaticChainRow {
-  chainName: string
-  blockchainId: string
-  initialBlockNumber: number
-}
-
 export const ChainTable = React.memo(function ChainTable({ chainData, loading, onRefresh }: ChainTableProps) {
-
-  // Find the chain with the highest utilization
-  const highestUtilizationId = useMemo(() => {
-    let maxUtilization = -1
-    let maxId = ''
-    
-    chainData.forEach((chain) => {
-      if (chain.blockData && !chain.loading && !chain.error) {
-        const gasUsed = parseInt(chain.blockData.gasUsed, 16)
-        const gasLimit = parseInt(chain.blockData.gasLimit, 16)
-        const utilization = (gasUsed / gasLimit) * 100
-        
-        if (utilization > maxUtilization) {
-          maxUtilization = utilization
-          maxId = chain.blockchainId
-        }
-      }
-    })
-    
-    return maxId
-  }, [chainData])
 
   if (loading && chainData.length === 0) {
     return (
@@ -138,7 +110,7 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
         </div>
         <div className="header-cell">Last Updated</div>
       </div>
-      
+
       {chainData.map((chain) => {
         if (chain.loading) {
           return (
@@ -201,14 +173,14 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
         const tps = chain.blockData.transactions.length / 2 // Assuming 2 second block time
         const timestamp = parseInt(chain.blockData.timestamp, 16)
         const gasLimit = parseInt(chain.blockData.gasLimit, 16) / 1000000 // Convert to Mgas
-        
+
         // Calculate block utilization percentage
         const gasUsedRaw = parseInt(chain.blockData.gasUsed, 16)
         const gasLimitRaw = parseInt(chain.blockData.gasLimit, 16)
         const utilization = (gasUsedRaw / gasLimitRaw) * 100
 
         return (
-          <div key={chain.blockchainId} className={`table-row ${chain.blockchainId === highestUtilizationId ? 'highlighted' : ''}`}>
+          <div key={chain.blockchainId} className="table-row">
             <div className="cell network-cell">
               <span className="network-name">{chain.chainName}</span>
             </div>

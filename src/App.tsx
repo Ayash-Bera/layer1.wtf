@@ -10,13 +10,28 @@ function App() {
   const [allDataFetched, setAllDataFetched] = useState(false)
 
   const fetchChainData = async (rpcUrl: string, chainName: string, evmChainId: string) => {
+    // Use proxy for UPTN to avoid CORS issues
+    if (rpcUrl.includes('node-api.uptn.io')) {
+      return await fetchChainDataViaProxy(rpcUrl, chainName, evmChainId)
+    }
+    // Use direct RPC URL for other chains
+    return await fetchChainDataDirect(rpcUrl, chainName, evmChainId)
+  }
+
+  const fetchChainDataViaProxy = async (rpcUrl: string, chainName: string, evmChainId: string) => {
+    // Try standalone proxy server first (runs on port 3001)
     try {
       // In production, use the external API directly; in development, use proxy
       const isProduction = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
-      const apiUrl = isProduction 
+      const apiUrl = isProduction
         ? `https://idx6.solokhin.com/api/${evmChainId}/rpc`
         : `/api/rpc/${evmChainId}/rpc`
-      
+
+      console.log(`Attempting proxy RPC call for ${chainName} via ${isProduction ? 'production API' : 'dev proxy'}`)
+
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 10000)
+
       const response = await fetch(apiUrl, {
         method: 'POST',
         mode: 'cors',
@@ -29,9 +44,12 @@ function App() {
           params: ['latest', true],
           id: 1,
           jsonrpc: '2.0'
-        })
+        }),
+        signal: controller.signal
       })
-      
+
+      clearTimeout(timeoutId)
+
       if (!response.ok) {
         // If API fails with 500 and chain config not found, try direct RPC
         if (response.status === 500) {
@@ -47,28 +65,36 @@ function App() {
         }
         throw new Error(`HTTP ${response.status}: Failed to fetch data for chain ${chainName}`)
       }
-      
+
       const data = await response.json()
-      
       if (data.error) {
         throw new Error(`RPC Error for ${chainName}: ${data.error.message || 'Unknown RPC error'}`)
       }
-      
+
+      console.log(`Successfully fetched data for ${chainName} via proxy`)
       return data.result
     } catch (err) {
-      console.error(`Error fetching data for chain ${chainName}:`, err)
-      throw err
+      console.warn(`Proxy failed for ${chainName}, trying direct request...`, err)
+    }
+
+    // Final fallback: Try direct request
+    try {
+      console.log(`Attempting direct request for ${chainName} as final fallback`)
+      return await fetchChainDataDirect(rpcUrl, chainName, evmChainId)
+    } catch (err) {
+      console.error(`All methods failed for ${chainName}:`, err)
+      throw new Error(`Failed to fetch ${chainName} data: All proxy methods failed.`)
     }
   }
 
   const fetchChainDataDirect = async (rpcUrl: string, chainName: string, evmChainId: string) => {
     try {
       console.log(`Attempting direct RPC call for ${chainName} to ${rpcUrl}`)
-      
+
       // Create an AbortController for timeout
       const controller = new AbortController()
       const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 second timeout
-      
+
       const response = await fetch(rpcUrl, {
         method: 'POST',
         mode: 'cors',
@@ -84,25 +110,29 @@ function App() {
         }),
         signal: controller.signal
       })
-      
+
       clearTimeout(timeoutId)
-      
+
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: Failed to fetch data for chain ${chainName} via direct RPC`)
       }
-      
+
       const data = await response.json()
-      
+
       if (data.error) {
         throw new Error(`RPC Error for ${chainName}: ${data.error.message || 'Unknown RPC error'}`)
       }
-      
+
       console.log(`Successfully fetched data for ${chainName} via direct RPC`)
       return data.result
     } catch (err) {
       if (err instanceof Error && err.name === 'AbortError') {
         console.error(`Timeout fetching data for chain ${chainName} via direct RPC`)
         throw new Error(`Timeout: Failed to fetch data for chain ${chainName} via direct RPC`)
+      }
+      if (err instanceof TypeError && err.message.includes('Failed to fetch')) {
+        console.error(`CORS or network error for ${chainName}:`, err)
+        throw new Error(`CORS/Network error: ${chainName} RPC endpoint may not allow browser requests.`)
       }
       console.error(`Error fetching data for chain ${chainName} via direct RPC:`, err)
       throw err
@@ -111,7 +141,7 @@ function App() {
 
   const fetchAllChainData = async () => {
     const activeChains = getActiveChains()
-    
+
     // Initialize chain data with loading state and set it immediately
     const initialChainData: ChainBlockData[] = activeChains.map(chain => ({
       chainName: chain.chainName,
@@ -121,7 +151,7 @@ function App() {
       error: null,
       lastUpdated: Date.now()
     }))
-    
+
     // Set initial loading state
     setChainData(initialChainData)
     setLoading(false)
@@ -165,18 +195,18 @@ function App() {
     const sortedChainData = workingChainData.sort((a, b) => {
       const aHasData = a.blockData && !a.loading && !a.error
       const bHasData = b.blockData && !b.loading && !b.error
-      
+
       // Chains with data come first
       if (aHasData && !bHasData) return -1
       if (!aHasData && bHasData) return 1
-      
+
       // If both have data, sort by block number (highest first)
       if (aHasData && bHasData) {
         const blockNumberA = parseInt(a.blockData!.number, 16)
         const blockNumberB = parseInt(b.blockData!.number, 16)
         return blockNumberB - blockNumberA
       }
-      
+
       // For chains without data, sort alphabetically
       return a.chainName.localeCompare(b.chainName)
     })
@@ -189,14 +219,14 @@ function App() {
   // Separate function for subsequent updates that maintains order
   const updateChainData = async () => {
     if (!allDataFetched) return
-    
+
     const activeChains = getActiveChains()
     const tempChainData = [...chainData]
 
-    const promises = activeChains.filter(chain => chain.evmChainId && chain.rpcUrl).map(async (chain, index) => {
+    const promises = activeChains.filter(chain => chain.evmChainId && chain.rpcUrl).map(async (chain) => {
       try {
         const blockData = await fetchChainData(chain.rpcUrl!, chain.chainName, chain.evmChainId!)
-        
+
         // Find and update the corresponding chain
         const chainIndex = tempChainData.findIndex(item => item.blockchainId === chain.evmChainId)
         if (chainIndex !== -1) {
@@ -223,21 +253,21 @@ function App() {
     })
 
     await Promise.allSettled(promises)
-    
+
     // Re-sort after updates to maintain proper order
     const sortedChainData = tempChainData.sort((a, b) => {
       const aHasData = a.blockData && !a.loading && !a.error
       const bHasData = b.blockData && !b.loading && !b.error
-      
+
       if (aHasData && !bHasData) return -1
       if (!aHasData && bHasData) return 1
-      
+
       if (aHasData && bHasData) {
         const blockNumberA = parseInt(a.blockData!.number, 16)
         const blockNumberB = parseInt(b.blockData!.number, 16)
         return blockNumberB - blockNumberA
       }
-      
+
       return a.chainName.localeCompare(b.chainName)
     })
 
@@ -246,22 +276,22 @@ function App() {
 
   useEffect(() => {
     fetchAllChainData()
-    
+
     // After initial fetch, use update function for subsequent calls
     const interval = setInterval(() => {
       if (allDataFetched) {
         updateChainData()
       }
     }, 5000)
-    
+
     return () => clearInterval(interval)
   }, [allDataFetched])
 
   return (
     <div className="app">
-      <Dashboard 
+      <Dashboard
         chainData={chainData}
-        loading={loading} 
+        loading={loading}
         onRefresh={() => {
           if (allDataFetched) {
             updateChainData()
