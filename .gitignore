@@ -31,3 +31,10 @@ Thumbs.db
 *.pid
 *.seed
 *.pid.lock
+
+# Tool configs
+.serena/
+
+# Temp files
+*.tmp
+*.temp

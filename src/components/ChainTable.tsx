@@ -14,12 +14,12 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
     return (
       <div className="chain-table">
         <div className="table-header">
-          <div className="header-cell sortable">✧ Network</div>
-          <div className="header-cell sortable">✧ Block</div>
-          <div className="header-cell sortable">✧ TPS</div>
-          <div className="header-cell sortable">✧ Mgas/s</div>
-          <div className="header-cell sortable">✧ KB/s</div>
-          <div className="header-cell sortable">✧ Stack</div>
+          <div className="header-cell sortable">Network</div>
+          <div className="header-cell sortable header-block">Block</div>
+          <div className="header-cell sortable header-tps">TPS</div>
+          <div className="header-cell sortable header-mgas">Mgas/s</div>
+          <div className="header-cell sortable header-kbs">KB/s</div>
+          <div className="header-cell header-stack">Stack</div>
         </div>
         <div className="loading-row">Loading chain data...</div>
       </div>
@@ -30,12 +30,12 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
     return (
       <div className="chain-table">
         <div className="table-header">
-          <div className="header-cell sortable">✧ Network</div>
-          <div className="header-cell sortable">✧ Block</div>
-          <div className="header-cell sortable">✧ TPS</div>
-          <div className="header-cell sortable">✧ Mgas/s</div>
-          <div className="header-cell sortable">✧ KB/s</div>
-          <div className="header-cell sortable">✧ Stack</div>
+          <div className="header-cell sortable">Network</div>
+          <div className="header-cell sortable header-block">Block</div>
+          <div className="header-cell sortable header-tps">TPS</div>
+          <div className="header-cell sortable header-mgas">Mgas/s</div>
+          <div className="header-cell sortable header-kbs">KB/s</div>
+          <div className="header-cell header-stack">Stack</div>
         </div>
         <div className="no-data">No data available</div>
       </div>
@@ -58,33 +58,36 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
   return (
     <div className="chain-table">
       <div className="table-header">
-        <div className="header-cell sortable">✧ Network</div>
-        <div className="header-cell sortable">✧ Block</div>
-        <div className="header-cell sortable">✧ TPS</div>
-        <div className="header-cell sortable">✧ Mgas/s ^</div>
-        <div className="header-cell sortable">✧ KB/s</div>
-        <div className="header-cell sortable">✧ Stack</div>
+        <div className="header-cell sortable">Network</div>
+        <div className="header-cell sortable header-block">Block</div>
+        <div className="header-cell sortable header-tps">TPS</div>
+        <div className="header-cell sortable header-mgas">Mgas/s ^</div>
+        <div className="header-cell sortable header-kbs">KB/s</div>
+        <div className="header-cell header-stack">Stack</div>
       </div>
 
       {chainData.map((chain) => {
+        const isCChain = chain.chainName === 'C-Chain'
+        const chainClass = isCChain ? 'c-chain' : 'l1-chain'
+
         if (chain.loading) {
           return (
-            <div key={chain.blockchainId} className="table-row">
+            <div key={chain.blockchainId} className={`table-row ${chainClass}`}>
               <div className="cell network-cell">
                 <span className="network-name">{chain.chainName}</span>
               </div>
-              <div className="cell numeric-cell">...</div>
-              <div className="cell numeric-cell">-</div>
-              <div className="cell numeric-cell">-</div>
-              <div className="cell numeric-cell">-</div>
-              <div className="cell">avalanche-l1</div>
+              <div className="cell numeric-cell block-cell">...</div>
+              <div className="cell numeric-cell tps-cell">-</div>
+              <div className="cell numeric-cell mgas-cell">-</div>
+              <div className="cell numeric-cell kbs-cell">-</div>
+              <div className="cell stack-cell">{isCChain ? 'primary' : 'avalanche-l1'}</div>
             </div>
           )
         }
 
         if (chain.error) {
           return (
-            <div key={chain.blockchainId} className="table-row error-row">
+            <div key={chain.blockchainId} className={`table-row error-row ${chainClass}`}>
               <div className="cell network-cell">
                 <span className="network-name">{chain.chainName}</span>
               </div>
@@ -97,15 +100,15 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
 
         if (!chain.blockData) {
           return (
-            <div key={chain.blockchainId} className="table-row">
+            <div key={chain.blockchainId} className={`table-row ${chainClass}`}>
               <div className="cell network-cell">
                 <span className="network-name">{chain.chainName}</span>
               </div>
-              <div className="cell numeric-cell">-</div>
-              <div className="cell numeric-cell">-</div>
-              <div className="cell numeric-cell">-</div>
-              <div className="cell numeric-cell">-</div>
-              <div className="cell">avalanche-l1</div>
+              <div className="cell numeric-cell block-cell">-</div>
+              <div className="cell numeric-cell tps-cell">-</div>
+              <div className="cell numeric-cell mgas-cell">-</div>
+              <div className="cell numeric-cell kbs-cell">-</div>
+              <div className="cell stack-cell">{isCChain ? 'primary' : 'avalanche-l1'}</div>
             </div>
           )
         }
@@ -120,23 +123,23 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
         const isHighlighted = chain.blockchainId === highestTpsId && highestTps > 0
 
         return (
-          <div key={chain.blockchainId} className={`table-row ${isHighlighted ? 'highlighted' : ''}`}>
+          <div key={chain.blockchainId} className={`table-row ${chainClass} ${isHighlighted ? 'highlighted' : ''}`}>
             <div className="cell network-cell">
               <span className="network-name">{chain.chainName}</span>
             </div>
-            <div className="cell numeric-cell">
+            <div className="cell numeric-cell block-cell">
               <AnimatedCounter value={blockNumber} decimals={0} />
             </div>
-            <div className="cell numeric-cell">
+            <div className="cell numeric-cell tps-cell">
               <AnimatedCounter value={tps} decimals={1} />
             </div>
-            <div className="cell numeric-cell">
+            <div className="cell numeric-cell mgas-cell">
               <AnimatedCounter value={mgasPerSecond} decimals={2} />
             </div>
-            <div className="cell numeric-cell">
+            <div className="cell numeric-cell kbs-cell">
               <AnimatedCounter value={kbPerSecond} decimals={2} />
             </div>
-            <div className="cell">avalanche-l1</div>
+            <div className="cell stack-cell">{isCChain ? 'primary' : 'avalanche-l1'}</div>
           </div>
         )
       })}
