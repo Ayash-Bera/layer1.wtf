@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Jersey+25&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -21,16 +23,17 @@ body {
 }
 
 /* Header */
-.site-header {
+.site-logo {
+  font-family: 'Jersey 25', sans-serif;
+  font-size: 64px;
+  font-weight: 400;
+  color: #ff4444;
+  letter-spacing: 6px;
+  text-shadow: 
+    0 0 20px rgba(255, 68, 68, 0.8),
+    0 0 40px rgba(255, 68, 68, 0.5);
   text-align: center;
-  padding: 10px 0;
-  border-bottom: 2px solid #ff4444;
-  margin-bottom: 10px;
-}
-
-.site-title {
-  font-size: 14px;
-  font-weight: normal;
+  margin-bottom: 20px;
 }
 
 .link {
