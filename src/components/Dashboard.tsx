@@ -127,6 +127,11 @@ export function Dashboard({ chainData, loading, onRefresh }: DashboardProps) {
           linkText="l1beat.io"
         />
       </div>
+
+      {/* Footer */}
+      <footer className="site-footer">
+        built with love by <a href="https://l1beat.io" target="_blank" rel="noopener noreferrer">L1Beat</a> team
+      </footer>
     </div>
   );
 }
