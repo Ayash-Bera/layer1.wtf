@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react'
 import { Dashboard } from './components/Dashboard'
 import { ChainBlockData } from './types'
 import { getActiveChains } from './data/chains'
+import CRTEffect from 'vault66-crt-effect'
+import 'vault66-crt-effect/dist/vault66-crt-effect.css'
 
 function App() {
   const [chainData, setChainData] = useState<ChainBlockData[]>([])
@@ -288,19 +290,21 @@ function App() {
   }, [allDataFetched])
 
   return (
-    <div className="app">
-      <Dashboard
-        chainData={chainData}
-        loading={loading}
-        onRefresh={() => {
-          if (allDataFetched) {
-            updateChainData()
-          } else {
-            fetchAllChainData()
-          }
-        }}
-      />
-    </div>
+    <CRTEffect preset="minimal">
+      <div className="app">
+        <Dashboard
+          chainData={chainData}
+          loading={loading}
+          onRefresh={() => {
+            if (allDataFetched) {
+              updateChainData()
+            } else {
+              fetchAllChainData()
+            }
+          }}
+        />
+      </div>
+    </CRTEffect>
   )
 }
 

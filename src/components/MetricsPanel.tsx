@@ -56,28 +56,28 @@ export function MetricsPanel({ metrics, loading, chainData }: MetricsPanelProps)
   if (loading) {
     return (
       <div className="metrics-grid">
-        <div className="metric">
+        <div className="metric metric-tps">
           <div className="metric-label">
             <Tooltip content="Total transactions per second across all L1s">
-              TPS ⓘ
+              TPS
             </Tooltip>
           </div>
           <div className="metric-value">...</div>
           <div className="metric-change">--</div>
         </div>
-        <div className="metric">
+        <div className="metric metric-mgas">
           <div className="metric-label">
             <Tooltip content="Total gas consumed per second across all L1s">
-              Mgas/s ⓘ
+              Mgas/s
             </Tooltip>
           </div>
           <div className="metric-value">...</div>
           <div className="metric-change">--</div>
         </div>
-        <div className="metric">
+        <div className="metric metric-kbs">
           <div className="metric-label">
             <Tooltip content="Total data throughput per second across all L1s">
-              KB/s ⓘ
+              KB/s
             </Tooltip>
           </div>
           <div className="metric-value">...</div>
@@ -90,28 +90,28 @@ export function MetricsPanel({ metrics, loading, chainData }: MetricsPanelProps)
   if (!metrics) {
     return (
       <div className="metrics-grid">
-        <div className="metric">
+        <div className="metric metric-tps">
           <div className="metric-label">
             <Tooltip content="Total transactions per second across all L1s">
-              TPS ⓘ
+              TPS
             </Tooltip>
           </div>
           <div className="metric-value">0.00</div>
           <div className="metric-change">(--x)</div>
         </div>
-        <div className="metric">
+        <div className="metric metric-mgas">
           <div className="metric-label">
             <Tooltip content="Total gas consumed per second across all L1s">
-              Mgas/s ⓘ
+              Mgas/s
             </Tooltip>
           </div>
           <div className="metric-value">0.00</div>
           <div className="metric-change">(--x)</div>
         </div>
-        <div className="metric">
+        <div className="metric metric-kbs">
           <div className="metric-label">
             <Tooltip content="Total data throughput per second across all L1s">
-              KB/s ⓘ
+              KB/s
             </Tooltip>
           </div>
           <div className="metric-value">0.00</div>
@@ -125,10 +125,10 @@ export function MetricsPanel({ metrics, loading, chainData }: MetricsPanelProps)
 
   return (
     <div className="metrics-grid">
-      <div className="metric">
+      <div className="metric metric-tps">
         <div className="metric-label">
           <Tooltip content="Total transactions per second across all L1s">
-            TPS ⓘ
+            TPS
           </Tooltip>
         </div>
         <div className="metric-value">
@@ -138,10 +138,10 @@ export function MetricsPanel({ metrics, loading, chainData }: MetricsPanelProps)
           {tpsMultiplier > 0 ? `(${tpsMultiplier.toFixed(2)}x)` : '(--x)'}
         </div>
       </div>
-      <div className="metric">
+      <div className="metric metric-mgas">
         <div className="metric-label">
           <Tooltip content="Total gas consumed per second across all L1s">
-            Mgas/s ⓘ
+            Mgas/s
           </Tooltip>
         </div>
         <div className="metric-value">
@@ -151,10 +151,10 @@ export function MetricsPanel({ metrics, loading, chainData }: MetricsPanelProps)
           {gasMultiplier > 0 ? `(${gasMultiplier.toFixed(2)}x)` : '(--x)'}
         </div>
       </div>
-      <div className="metric">
+      <div className="metric metric-kbs">
         <div className="metric-label">
           <Tooltip content="Total data throughput per second across all L1s">
-            KB/s ⓘ
+            KB/s
           </Tooltip>
         </div>
         <div className="metric-value">

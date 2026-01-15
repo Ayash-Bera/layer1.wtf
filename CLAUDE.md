@@ -1,67 +1,50 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code when working with this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
 
 Layer1.wtf is a real-time dashboard for monitoring Avalanche L1 chains (formerly subnets). It displays metrics like TPS, Mgas/s, KB/s, and block numbers fetched directly from RPC endpoints.
 
-## Tech Stack
-
-- **Frontend**: React 18 + TypeScript
-- **Build Tool**: Vite
-- **Styling**: Plain CSS (retro terminal aesthetic)
-
 ## Commands
 
 ```bash
 npm install      # Install dependencies
-npm run dev      # Start development server (port 5173)
+npm run dev      # Start Vite dev server (port 5173)
 npm run build    # Production build
 npm run preview  # Preview production build
 ```
 
-## Project Structure
+## Architecture
 
-```
-src/
-├── App.tsx              # Main app with RPC fetching logic
-├── components/
-│   ├── Dashboard.tsx    # Main layout with tabs, totals, filters, table
-│   ├── ChainTable.tsx   # Table displaying chain data
-│   ├── MetricsPanel.tsx # Totals section (TPS, Mgas/s, KB/s)
-│   ├── AnimatedCounter.tsx
-│   ├── ErrorDialog.tsx
-│   ├── Header.tsx
-│   └── Tooltip.tsx
-├── data/
-│   ├── chains.json      # Chain configurations (RPC URLs, chain IDs)
-│   └── chains.ts        # Helper to get active chains
-├── types/
-│   └── index.ts         # TypeScript interfaces
-├── utils/
-│   └── formatters.ts    # Formatting utilities
-└── index.css            # All styles
-```
+### Data Flow
 
-## Key Files
+1. **App.tsx** fetches block data from RPC endpoints every 5 seconds
+2. Data passes to **Dashboard.tsx** which calculates aggregate metrics (total TPS, Mgas/s)
+3. **ChainTable.tsx** renders individual chain rows sorted by Mgas/s
+4. **MetricsPanel.tsx** displays totals with animated counters
 
-- **chains.json**: Contains all Avalanche L1 chain configs. Chains with `rpcUrl: null` are excluded from the dashboard.
-- **App.tsx**: Handles RPC calls with CORS proxy fallback for problematic endpoints (like UPTN).
-- **index.css**: Retro blue terminal styling inspired by rollup.wtf.
+### RPC Fetching Strategy (App.tsx)
 
-## Adding a New Chain
+The app uses a two-tier approach for RPC calls:
+- **Direct RPC**: Most chains use direct `eth_getBlockByNumber` calls
+- **Proxy fallback**: Chains with CORS issues (like UPTN) route through `idx6.solokhin.com` API in production, or Vite's dev proxy locally
 
-1. Add entry to `src/data/chains.json` with:
-   - `chainName`, `blockchainId`, `subnetId`
-   - `rpcUrl` (or `null` if no public RPC)
-   - `evmChainId`
+### Chain Configuration
 
-2. The chain will automatically appear if it has both `rpcUrl` and `evmChainId`.
+Chains are defined in `src/data/chains.json`. A chain appears on the dashboard if it has both:
+- `rpcUrl` (non-null)
+- `evmChainId` (non-null)
 
-## Notes
+To add a new chain, add an entry with: `chainName`, `blockchainId`, `subnetId`, `rpcUrl`, `evmChainId`
+
+### Metrics Calculation
 
 - Assumes 2-second block time for TPS/Mgas/s calculations
-- Chains are sorted by Mgas/s (highest first)
-- Highest TPS chain is highlighted in green
-- Data refreshes every 5 seconds
+- Only chains with blocks within the last hour contribute to totals
+- Chains sorted by Mgas/s (gas used per second), highest first
+
+### Proxy Configuration
+
+- **vite.config.ts**: Dev proxy rewrites `/api/rpc/*` to `idx6.solokhin.com/api/*`
+- **proxy-server.js**: Standalone Node proxy for UPTN (port 3001), run with `npm run dev:proxy`
