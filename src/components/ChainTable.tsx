@@ -71,7 +71,7 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
           <div className="header-cell sortable header-mgas">Mgas/s</div>
           <div className="header-cell sortable header-kbs">KB/s</div>
           <div className="header-cell header-stack">Stack</div>
-          <div className="header-cell header-activity"></div>
+          <div className="header-cell header-sparkline">TPS Graph</div>
         </div>
         <div className="loading-row">Loading chain data...</div>
       </div>
@@ -88,7 +88,7 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
           <div className="header-cell sortable header-mgas">Mgas/s</div>
           <div className="header-cell sortable header-kbs">KB/s</div>
           <div className="header-cell header-stack">Stack</div>
-          <div className="header-cell header-activity"></div>
+          <div className="header-cell header-sparkline">TPS Graph</div>
         </div>
         <div className="no-data">No data available</div>
       </div>
@@ -117,7 +117,7 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
         <div className="header-cell sortable header-mgas">Mgas/s ^</div>
         <div className="header-cell sortable header-kbs">KB/s</div>
         <div className="header-cell header-stack">Stack</div>
-        <div className="header-cell header-activity"></div>
+        <div className="header-cell header-sparkline">TPS Graph</div>
       </div>
 
       {chainData.map((chain) => {
