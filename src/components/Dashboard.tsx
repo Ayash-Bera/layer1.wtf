@@ -84,7 +84,7 @@ export function Dashboard({ chainData, loading, onRefresh }: DashboardProps) {
   return (
     <div className="app">
       {/* Header - Outside container */}
-      <h1 className="site-logo">Layer!wtf</h1>
+      <img src="/logo-full.png" alt="Layer!wtf" className="site-logo" />
 
       <div className="main-container">
         {/* Tabs */}
@@ -127,6 +127,11 @@ export function Dashboard({ chainData, loading, onRefresh }: DashboardProps) {
           linkText="l1beat.io"
         />
       </div>
+
+      {/* Footer */}
+      <footer className="site-footer">
+        built with love by <a href="https://l1beat.io" target="_blank" rel="noopener noreferrer">L1Beat</a> team
+      </footer>
     </div>
   );
 }
