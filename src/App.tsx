@@ -168,12 +168,15 @@ function App() {
         // Update the working array
         const chainIndex = workingChainData.findIndex(item => item.blockchainId === chain.evmChainId)
         if (chainIndex !== -1) {
+          const tps = blockData.transactions.length / 2
+          const existingHistory = workingChainData[chainIndex].tpsHistory || []
           workingChainData[chainIndex] = {
             ...workingChainData[chainIndex],
             blockData,
             loading: false,
             error: null,
-            lastUpdated: Date.now()
+            lastUpdated: Date.now(),
+            tpsHistory: [...existingHistory.slice(-19), tps]
           }
         }
       } catch (err) {
@@ -223,57 +226,67 @@ function App() {
     if (!allDataFetched) return
 
     const activeChains = getActiveChains()
-    const tempChainData = [...chainData]
+
+    // Fetch all data first
+    const updates: Map<string, { blockData?: any; error?: string }> = new Map()
 
     const promises = activeChains.filter(chain => chain.evmChainId && chain.rpcUrl).map(async (chain) => {
       try {
         const blockData = await fetchChainData(chain.rpcUrl!, chain.chainName, chain.evmChainId!)
-
-        // Find and update the corresponding chain
-        const chainIndex = tempChainData.findIndex(item => item.blockchainId === chain.evmChainId)
-        if (chainIndex !== -1) {
-          tempChainData[chainIndex] = {
-            ...tempChainData[chainIndex],
-            blockData,
-            loading: false,
-            error: null,
-            lastUpdated: Date.now()
-          }
-        }
+        updates.set(chain.evmChainId!, { blockData })
       } catch (err) {
-        // Find and update the corresponding chain with error
-        const chainIndex = tempChainData.findIndex(item => item.blockchainId === chain.evmChainId)
-        if (chainIndex !== -1) {
-          tempChainData[chainIndex] = {
-            ...tempChainData[chainIndex],
-            loading: false,
-            error: err instanceof Error ? err.message : `Unknown error for ${chain.chainName}`,
-            lastUpdated: Date.now()
-          }
-        }
+        updates.set(chain.evmChainId!, { error: err instanceof Error ? err.message : `Unknown error for ${chain.chainName}` })
       }
     })
 
     await Promise.allSettled(promises)
 
-    // Re-sort after updates to maintain proper order
-    const sortedChainData = tempChainData.sort((a, b) => {
-      const aHasData = a.blockData && !a.loading && !a.error
-      const bHasData = b.blockData && !b.loading && !b.error
+    // Use functional setState to get current state
+    setChainData(prevChainData => {
+      const tempChainData = [...prevChainData]
 
-      if (aHasData && !bHasData) return -1
-      if (!aHasData && bHasData) return 1
+      updates.forEach((update, evmChainId) => {
+        const chainIndex = tempChainData.findIndex(item => item.blockchainId === evmChainId)
+        if (chainIndex !== -1) {
+          if (update.blockData) {
+            const tps = update.blockData.transactions.length / 2
+            const existingHistory = tempChainData[chainIndex].tpsHistory || []
+            tempChainData[chainIndex] = {
+              ...tempChainData[chainIndex],
+              blockData: update.blockData,
+              loading: false,
+              error: null,
+              lastUpdated: Date.now(),
+              tpsHistory: [...existingHistory.slice(-19), tps]
+            }
+          } else if (update.error) {
+            tempChainData[chainIndex] = {
+              ...tempChainData[chainIndex],
+              loading: false,
+              error: update.error,
+              lastUpdated: Date.now()
+            }
+          }
+        }
+      })
 
-      if (aHasData && bHasData) {
-        const blockNumberA = parseInt(a.blockData!.number, 16)
-        const blockNumberB = parseInt(b.blockData!.number, 16)
-        return blockNumberB - blockNumberA
-      }
+      // Re-sort after updates to maintain proper order
+      return tempChainData.sort((a, b) => {
+        const aHasData = a.blockData && !a.loading && !a.error
+        const bHasData = b.blockData && !b.loading && !b.error
 
-      return a.chainName.localeCompare(b.chainName)
+        if (aHasData && !bHasData) return -1
+        if (!aHasData && bHasData) return 1
+
+        if (aHasData && bHasData) {
+          const blockNumberA = parseInt(a.blockData!.number, 16)
+          const blockNumberB = parseInt(b.blockData!.number, 16)
+          return blockNumberB - blockNumberA
+        }
+
+        return a.chainName.localeCompare(b.chainName)
+      })
     })
-
-    setChainData(sortedChainData)
   }
 
   useEffect(() => {

@@ -197,7 +197,7 @@ body {
 
 .table-header {
   display: grid;
-  grid-template-columns: 160px 100px 70px 90px 80px 120px;
+  grid-template-columns: 160px 100px 70px 90px 80px 90px 140px;
   border-bottom: 1px solid #ff4444;
   font-size: 13px;
 }
@@ -237,7 +237,7 @@ body {
 
 .table-row {
   display: grid;
-  grid-template-columns: 160px 100px 70px 90px 80px 120px;
+  grid-template-columns: 160px 100px 70px 90px 80px 90px 140px;
   font-size: 13px;
 }
 
@@ -309,6 +309,20 @@ body {
 
 .kbs-cell {
   color: #999999 !important;
+}
+
+.sparkline-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sparkline-cell canvas {
+  display: block;
+}
+
+.stack-cell {
+  white-space: nowrap;
 }
 
 .numeric-cell {
@@ -539,8 +553,12 @@ body {
 
   .table-header,
   .table-row {
-    grid-template-columns: 140px 90px 60px 80px 70px 100px;
+    grid-template-columns: 140px 90px 60px 80px 70px 80px 100px;
     font-size: 11px;
+  }
+
+  .stack-cell {
+    font-size: 10px;
   }
 
   .cell {
@@ -564,7 +582,11 @@ body {
 
   .table-header,
   .table-row {
-    grid-template-columns: 110px 80px 50px 70px 60px 90px;
+    grid-template-columns: 110px 80px 50px 70px 60px 70px 80px;
     font-size: 10px;
+  }
+
+  .stack-cell {
+    font-size: 9px;
   }
 }

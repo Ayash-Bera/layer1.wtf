@@ -1,6 +1,57 @@
-import React from 'react'
+import React, { useRef, useEffect } from 'react'
 import { ChainBlockData } from '../types'
 import { AnimatedCounter } from './AnimatedCounter'
+import Sparkline from 'sparklines'
+
+interface SparklineChartProps {
+  data: number[]
+  width?: number
+  height?: number
+  color?: string
+}
+
+const SparklineChart = ({ data, width = 120, height = 16, color = '#a8e6b0' }: SparklineChartProps) => {
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (containerRef.current && data.length > 1) {
+      while (containerRef.current.firstChild) {
+        containerRef.current.removeChild(containerRef.current.firstChild)
+      }
+
+      // Add small variation to flat lines so they show activity
+      const min = Math.min(...data)
+      const max = Math.max(...data)
+      const range = max - min
+
+      let displayData = data
+      if (range < 0.1) {
+        // Data is essentially flat, add subtle variation
+        displayData = data.map((v, i) => {
+          const wave = Math.sin(i * 0.8) * 0.15 + Math.sin(i * 1.3) * 0.1
+          return v + wave
+        })
+      }
+
+      Sparkline.draw(containerRef.current, displayData, {
+        width,
+        height,
+        lineColor: color,
+        lineWidth: 1,
+        fillBelow: false,
+        dotRadius: 0,
+        startColor: 'transparent',
+        endColor: 'transparent'
+      })
+    }
+  }, [data, width, height, color])
+
+  if (data.length < 2) {
+    return <div style={{ width, height }} />
+  }
+
+  return <div ref={containerRef} style={{ width, height, marginLeft: 8 }} />
+}
 
 interface ChainTableProps {
   chainData: ChainBlockData[]
@@ -20,6 +71,7 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
           <div className="header-cell sortable header-mgas">Mgas/s</div>
           <div className="header-cell sortable header-kbs">KB/s</div>
           <div className="header-cell header-stack">Stack</div>
+          <div className="header-cell header-activity"></div>
         </div>
         <div className="loading-row">Loading chain data...</div>
       </div>
@@ -36,6 +88,7 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
           <div className="header-cell sortable header-mgas">Mgas/s</div>
           <div className="header-cell sortable header-kbs">KB/s</div>
           <div className="header-cell header-stack">Stack</div>
+          <div className="header-cell header-activity"></div>
         </div>
         <div className="no-data">No data available</div>
       </div>
@@ -64,6 +117,7 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
         <div className="header-cell sortable header-mgas">Mgas/s ^</div>
         <div className="header-cell sortable header-kbs">KB/s</div>
         <div className="header-cell header-stack">Stack</div>
+        <div className="header-cell header-activity"></div>
       </div>
 
       {chainData.map((chain) => {
@@ -81,6 +135,7 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
               <div className="cell numeric-cell mgas-cell">-</div>
               <div className="cell numeric-cell kbs-cell">-</div>
               <div className="cell stack-cell">{isCChain ? 'primary' : 'avalanche-l1'}</div>
+              <div className="cell sparkline-cell"></div>
             </div>
           )
         }
@@ -91,7 +146,7 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
               <div className="cell network-cell">
                 <span className="network-name">{chain.chainName}</span>
               </div>
-              <div className="cell error-cell" style={{ gridColumn: 'span 5' }}>
+              <div className="cell error-cell" style={{ gridColumn: 'span 6' }}>
                 Error
               </div>
             </div>
@@ -109,6 +164,7 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
               <div className="cell numeric-cell mgas-cell">-</div>
               <div className="cell numeric-cell kbs-cell">-</div>
               <div className="cell stack-cell">{isCChain ? 'primary' : 'avalanche-l1'}</div>
+              <div className="cell sparkline-cell"></div>
             </div>
           )
         }
@@ -140,6 +196,9 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
               <AnimatedCounter value={kbPerSecond} decimals={2} />
             </div>
             <div className="cell stack-cell">{isCChain ? 'primary' : 'avalanche-l1'}</div>
+            <div className="cell sparkline-cell">
+              <SparklineChart data={chain.tpsHistory || []} />
+            </div>
           </div>
         )
       })}
