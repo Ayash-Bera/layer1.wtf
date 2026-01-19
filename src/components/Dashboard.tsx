@@ -84,7 +84,10 @@ export function Dashboard({ chainData, loading, onRefresh }: DashboardProps) {
   return (
     <div className="app">
       {/* Header - Outside container */}
-      <img src="/logo-full.png" alt="Layer!wtf" className="site-logo" />
+      <div className="site-header">
+        <img src="/logo.png" alt="Layer!wtf" className="site-logo-img" />
+        <h1 className="site-logo">layer!wtf</h1>
+      </div>
 
       <div className="main-container">
         {/* Tabs */}

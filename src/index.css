@@ -23,17 +23,50 @@ body {
 }
 
 /* Header */
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.site-logo-img {
+  height: 50px;
+  filter:
+    drop-shadow(0 0 10px rgba(255, 68, 68, 0.8))
+    drop-shadow(0 0 20px rgba(255, 68, 68, 0.5));
+}
+
 .site-logo {
   font-family: 'Jersey 25', sans-serif;
-  font-size: 64px;
+  font-size: 48px;
   font-weight: 400;
   color: #ff4444;
-  letter-spacing: 6px;
+  letter-spacing: 4px;
   text-shadow: 
     0 0 20px rgba(255, 68, 68, 0.8),
     0 0 40px rgba(255, 68, 68, 0.5);
+  margin: 0;
+}
+
+/* Footer */
+.site-footer {
   text-align: center;
-  margin-bottom: 20px;
+  padding: 25px;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #888888;
+}
+
+.site-footer a {
+  color: #ff6b6b;
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  color: #ff9999;
+  text-decoration: underline;
 }
 
 .link {
