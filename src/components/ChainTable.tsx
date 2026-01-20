@@ -121,7 +121,7 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
       </div>
 
       {chainData.map((chain) => {
-        const isCChain = chain.chainName === 'C-Chain'
+        const isCChain = chain.chainName === 'C-Chain' || chain.chainName === 'Avalanche C-Chain'
         const chainClass = isCChain ? 'c-chain' : 'l1-chain'
 
         if (chain.loading) {
