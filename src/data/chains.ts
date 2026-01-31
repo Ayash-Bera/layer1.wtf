@@ -11,6 +11,8 @@ export interface Chain {
   subnetId: string
   rpcUrl: string | null
   evmChainId: string | null
+  vmName: string | null
+  isL1: boolean
   logo: string | null
   description: string | null
   explorerUrl: string | null

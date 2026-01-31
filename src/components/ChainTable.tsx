@@ -1,6 +1,8 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { ChainBlockData } from '../types'
 import { AnimatedCounter } from './AnimatedCounter'
+import { ChainDetailPopup } from './ChainDetailPopup'
+import { chains, Chain } from '../data/chains'
 import Sparkline from 'sparklines'
 
 interface SparklineChartProps {
@@ -19,14 +21,12 @@ const SparklineChart = ({ data, width = 120, height = 16, color = '#a8e6b0' }: S
         containerRef.current.removeChild(containerRef.current.firstChild)
       }
 
-      // Add small variation to flat lines so they show activity
       const min = Math.min(...data)
       const max = Math.max(...data)
       const range = max - min
 
       let displayData = data
       if (range < 0.1) {
-        // Data is essentially flat, add subtle variation
         displayData = data.map((v, i) => {
           const wave = Math.sin(i * 0.8) * 0.15 + Math.sin(i * 1.3) * 0.1
           return v + wave
@@ -59,7 +59,72 @@ interface ChainTableProps {
   onRefresh: () => void
 }
 
+interface ChainRowProps {
+  chain: ChainBlockData
+  isCChain: boolean
+  chainClass: string
+  isHighlighted: boolean
+  children: React.ReactNode
+  onHover: (chainMeta: Chain | null, event: React.MouseEvent | null) => void
+}
+
+const ChainRow = ({ chain, isCChain, chainClass, isHighlighted, children, onHover }: ChainRowProps) => {
+  const chainMeta = chains.find(c => c.chainName === chain.chainName)
+
+  return (
+    <div 
+      className={`table-row ${chainClass} ${isHighlighted ? 'highlighted' : ''}`}
+      onMouseEnter={(e) => onHover(chainMeta || null, e)}
+      onMouseLeave={() => onHover(null, null)}
+    >
+      {children}
+    </div>
+  )
+}
+
 export const ChainTable = React.memo(function ChainTable({ chainData, loading, onRefresh }: ChainTableProps) {
+  const [hoveredChain, setHoveredChain] = useState<Chain | null>(null)
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
+  const [isVisible, setIsVisible] = useState(false)
+  const timeoutRef = useRef<number | null>(null)
+
+  const handleHover = (chainMeta: Chain | null, event: React.MouseEvent | null) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+
+    if (chainMeta && event) {
+      setMousePos({ x: event.clientX, y: event.clientY })
+      timeoutRef.current = window.setTimeout(() => {
+        setHoveredChain(chainMeta)
+        setIsVisible(true)
+      }, 80)
+    } else {
+      timeoutRef.current = window.setTimeout(() => {
+        setIsVisible(false)
+        setHoveredChain(null)
+      }, 100)
+    }
+  }
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (isVisible) {
+      setMousePos({ x: e.clientX, y: e.clientY })
+    }
+  }
+
+  const handlePopupEnter = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+  }
+
+  const handlePopupLeave = () => {
+    timeoutRef.current = window.setTimeout(() => {
+      setIsVisible(false)
+      setHoveredChain(null)
+    }, 100)
+  }
 
   if (loading && chainData.length === 0) {
     return (
@@ -95,7 +160,6 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
     )
   }
 
-  // Find highest TPS chain for highlighting
   let highestTpsId = ''
   let highestTps = 0
   chainData.forEach(chain => {
@@ -109,7 +173,7 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
   })
 
   return (
-    <div className="chain-table">
+    <div className="chain-table" onMouseMove={handleMouseMove}>
       <div className="table-header">
         <div className="header-cell sortable">Network</div>
         <div className="header-cell sortable header-block">Block</div>
@@ -123,10 +187,18 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
       {chainData.map((chain) => {
         const isCChain = chain.chainName === 'C-Chain' || chain.chainName === 'Avalanche C-Chain'
         const chainClass = isCChain ? 'c-chain' : 'l1-chain'
+        const isHighlighted = chain.blockchainId === highestTpsId && highestTps > 0
 
         if (chain.loading) {
           return (
-            <div key={chain.blockchainId} className={`table-row ${chainClass}`}>
+            <ChainRow 
+              key={chain.blockchainId}
+              chain={chain}
+              isCChain={isCChain}
+              chainClass={chainClass}
+              isHighlighted={false}
+              onHover={handleHover}
+            >
               <div className="cell network-cell">
                 <span className="network-name">{chain.chainName}</span>
               </div>
@@ -136,26 +208,40 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
               <div className="cell numeric-cell kbs-cell">-</div>
               <div className="cell stack-cell">{isCChain ? 'primary' : 'avalanche-l1'}</div>
               <div className="cell sparkline-cell"></div>
-            </div>
+            </ChainRow>
           )
         }
 
         if (chain.error) {
           return (
-            <div key={chain.blockchainId} className={`table-row error-row ${chainClass}`}>
+            <ChainRow 
+              key={chain.blockchainId}
+              chain={chain}
+              isCChain={isCChain}
+              chainClass={`${chainClass} error-row`}
+              isHighlighted={false}
+              onHover={handleHover}
+            >
               <div className="cell network-cell">
                 <span className="network-name">{chain.chainName}</span>
               </div>
               <div className="cell error-cell" style={{ gridColumn: 'span 6' }}>
                 Error
               </div>
-            </div>
+            </ChainRow>
           )
         }
 
         if (!chain.blockData) {
           return (
-            <div key={chain.blockchainId} className={`table-row ${chainClass}`}>
+            <ChainRow 
+              key={chain.blockchainId}
+              chain={chain}
+              isCChain={isCChain}
+              chainClass={chainClass}
+              isHighlighted={false}
+              onHover={handleHover}
+            >
               <div className="cell network-cell">
                 <span className="network-name">{chain.chainName}</span>
               </div>
@@ -165,21 +251,26 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
               <div className="cell numeric-cell kbs-cell">-</div>
               <div className="cell stack-cell">{isCChain ? 'primary' : 'avalanche-l1'}</div>
               <div className="cell sparkline-cell"></div>
-            </div>
+            </ChainRow>
           )
         }
 
         const blockNumber = parseInt(chain.blockData.number, 16)
         const gasUsed = parseInt(chain.blockData.gasUsed, 16)
         const blockSize = parseInt(chain.blockData.size, 16)
-        const tps = chain.blockData.transactions.length / 2 // Assuming 2 second block time
-        const mgasPerSecond = (gasUsed / 1000000) / 2 // Mgas per second (assuming 2s blocks)
-        const kbPerSecond = (blockSize / 1024) / 2 // KB per second (assuming 2s blocks)
-
-        const isHighlighted = chain.blockchainId === highestTpsId && highestTps > 0
+        const tps = chain.blockData.transactions.length / 2
+        const mgasPerSecond = (gasUsed / 1000000) / 2
+        const kbPerSecond = (blockSize / 1024) / 2
 
         return (
-          <div key={chain.blockchainId} className={`table-row ${chainClass} ${isHighlighted ? 'highlighted' : ''}`}>
+          <ChainRow 
+            key={chain.blockchainId}
+            chain={chain}
+            isCChain={isCChain}
+            chainClass={chainClass}
+            isHighlighted={isHighlighted}
+            onHover={handleHover}
+          >
             <div className="cell network-cell">
               <span className="network-name">{chain.chainName}</span>
             </div>
@@ -199,9 +290,41 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
             <div className="cell sparkline-cell">
               <SparklineChart data={chain.tpsHistory || []} />
             </div>
-          </div>
+          </ChainRow>
         )
       })}
+
+      {isVisible && hoveredChain && (() => {
+        const popupWidth = 300
+        const popupHeight = 320
+        let x = mousePos.x + 15
+        let y = mousePos.y + 15
+        
+        if (x + popupWidth > window.innerWidth - 10) {
+          x = mousePos.x - popupWidth - 15
+        }
+        if (y + popupHeight > window.innerHeight - 10) {
+          y = mousePos.y - popupHeight - 15
+        }
+        if (x < 10) x = 10
+        if (y < 10) y = 10
+
+        return (
+          <div
+            className="chain-popup-wrapper"
+            style={{
+              position: 'fixed',
+              left: x,
+              top: y,
+              zIndex: 999999,
+            }}
+            onMouseEnter={handlePopupEnter}
+            onMouseLeave={handlePopupLeave}
+          >
+            <ChainDetailPopup chain={hoveredChain} />
+          </div>
+        )
+      })()}
     </div>
   )
 })

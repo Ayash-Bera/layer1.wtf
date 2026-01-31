@@ -51,6 +51,8 @@ function parseRegistryChain(registryData, folderName) {
       subnetId: registryData.subnetId,
       rpcUrl: rpcUrl,
       evmChainId: chainData.evmChainId ? String(chainData.evmChainId) : null,
+      vmName: chainData.vmName || null,
+      isL1: registryData.isL1 ?? true,
       logo: registryData.logo || null,
       description: chainData.description || registryData.description || null,
       explorerUrl: chainData.explorerUrl || null,
