@@ -66,16 +66,18 @@ interface ChainRowProps {
   isHighlighted: boolean
   children: React.ReactNode
   onHover: (chainMeta: Chain | null, event: React.MouseEvent | null) => void
+  onClick: (chainMeta: Chain | null, event: React.MouseEvent) => void
 }
 
-const ChainRow = ({ chain, isCChain, chainClass, isHighlighted, children, onHover }: ChainRowProps) => {
+const ChainRow = ({ chain, isCChain, chainClass, isHighlighted, children, onHover, onClick }: ChainRowProps) => {
   const chainMeta = chains.find(c => c.chainName === chain.chainName)
 
   return (
-    <div 
+    <div
       className={`table-row ${chainClass} ${isHighlighted ? 'highlighted' : ''}`}
       onMouseEnter={(e) => onHover(chainMeta || null, e)}
       onMouseLeave={() => onHover(null, null)}
+      onClick={(e) => onClick(chainMeta || null, e)}
     >
       {children}
     </div>
@@ -84,11 +86,40 @@ const ChainRow = ({ chain, isCChain, chainClass, isHighlighted, children, onHove
 
 export const ChainTable = React.memo(function ChainTable({ chainData, loading, onRefresh }: ChainTableProps) {
   const [hoveredChain, setHoveredChain] = useState<Chain | null>(null)
+  const [pinnedChain, setPinnedChain] = useState<Chain | null>(null)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
   const [isVisible, setIsVisible] = useState(false)
   const timeoutRef = useRef<number | null>(null)
+  const popupRef = useRef<HTMLDivElement | null>(null)
+
+  const activeChain = pinnedChain || hoveredChain
+
+  useEffect(() => {
+    if (!pinnedChain) return
+
+    const handleClickOutside = (e: MouseEvent) => {
+      if (popupRef.current && !popupRef.current.contains(e.target as Node)) {
+        setPinnedChain(null)
+        setHoveredChain(null)
+        setIsVisible(false)
+      }
+    }
+
+    document.addEventListener('click', handleClickOutside)
+    return () => document.removeEventListener('click', handleClickOutside)
+  }, [pinnedChain])
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+    }
+  }, [])
 
   const handleHover = (chainMeta: Chain | null, event: React.MouseEvent | null) => {
+    if (pinnedChain) return
+
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current)
     }
@@ -107,8 +138,18 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
     }
   }
 
+  const handleClick = (chainMeta: Chain | null, event: React.MouseEvent) => {
+    if (pinnedChain) return // Let document click handler handle closing
+    if (chainMeta) {
+      event.stopPropagation()
+      setMousePos({ x: event.clientX, y: event.clientY })
+      setPinnedChain(chainMeta)
+      setIsVisible(true)
+    }
+  }
+
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (isVisible) {
+    if (isVisible && !pinnedChain) {
       setMousePos({ x: e.clientX, y: e.clientY })
     }
   }
@@ -120,6 +161,7 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
   }
 
   const handlePopupLeave = () => {
+    if (pinnedChain) return
     timeoutRef.current = window.setTimeout(() => {
       setIsVisible(false)
       setHoveredChain(null)
@@ -198,6 +240,7 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
               chainClass={chainClass}
               isHighlighted={false}
               onHover={handleHover}
+              onClick={handleClick}
             >
               <div className="cell network-cell">
                 <span className="network-name">{chain.chainName}</span>
@@ -221,6 +264,7 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
               chainClass={`${chainClass} error-row`}
               isHighlighted={false}
               onHover={handleHover}
+              onClick={handleClick}
             >
               <div className="cell network-cell">
                 <span className="network-name">{chain.chainName}</span>
@@ -241,6 +285,7 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
               chainClass={chainClass}
               isHighlighted={false}
               onHover={handleHover}
+              onClick={handleClick}
             >
               <div className="cell network-cell">
                 <span className="network-name">{chain.chainName}</span>
@@ -263,13 +308,14 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
         const kbPerSecond = (blockSize / 1024) / 2
 
         return (
-          <ChainRow 
+          <ChainRow
             key={chain.blockchainId}
             chain={chain}
             isCChain={isCChain}
             chainClass={chainClass}
             isHighlighted={isHighlighted}
             onHover={handleHover}
+            onClick={handleClick}
           >
             <div className="cell network-cell">
               <span className="network-name">{chain.chainName}</span>
@@ -294,7 +340,7 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
         )
       })}
 
-      {isVisible && hoveredChain && (() => {
+      {isVisible && activeChain && (() => {
         const popupWidth = 300
         const popupHeight = 320
         let x = mousePos.x + 15
@@ -311,7 +357,8 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
 
         return (
           <div
-            className="chain-popup-wrapper"
+            ref={popupRef}
+            className={`chain-popup-wrapper ${pinnedChain ? 'pinned' : ''}`}
             style={{
               position: 'fixed',
               left: x,
@@ -321,7 +368,10 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
             onMouseEnter={handlePopupEnter}
             onMouseLeave={handlePopupLeave}
           >
-            <ChainDetailPopup chain={hoveredChain} />
+            <ChainDetailPopup chain={activeChain} />
+            {pinnedChain && (
+              <div className="popup-hint">click anywhere to close</div>
+            )}
           </div>
         )
       })()}

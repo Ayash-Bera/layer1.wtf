@@ -708,6 +708,41 @@ body {
   background-color: rgba(255, 68, 68, 0.25);
 }
 
+.chain-popup-wrapper.pinned .chain-detail-popup {
+  border-color: #ff6b6b;
+}
+
+.copy-toast {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid #ff4444;
+  color: #ff4444;
+  padding: 8px 16px;
+  font-size: 11px;
+  z-index: 10;
+  animation: toastFade 1.5s ease-out forwards;
+}
+
+@keyframes toastFade {
+  0% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.popup-hint {
+  text-align: center;
+  font-size: 9px;
+  color: #666;
+  padding: 6px 0;
+  background: #0a0a0a;
+  border: 1px solid #ff4444;
+  border-top: none;
+  letter-spacing: 0.3px;
+}
+
 /* Responsive */
 @media (max-width: 900px) {
   .app {

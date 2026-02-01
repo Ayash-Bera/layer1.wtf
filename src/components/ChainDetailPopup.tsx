@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Chain } from '../data/chains'
 
 interface ChainDetailPopupProps {
@@ -6,9 +6,13 @@ interface ChainDetailPopupProps {
 }
 
 export function ChainDetailPopup({ chain }: ChainDetailPopupProps) {
-  const copyToClipboard = (text: string, e: React.MouseEvent) => {
+  const [toast, setToast] = useState<string | null>(null)
+
+  const copyToClipboard = (text: string, label: string, e: React.MouseEvent) => {
     e.stopPropagation()
     navigator.clipboard.writeText(text)
+    setToast(`${label} copied`)
+    setTimeout(() => setToast(null), 1500)
   }
 
   const isPrimaryNetwork = chain.categories?.includes('L0')
@@ -16,6 +20,7 @@ export function ChainDetailPopup({ chain }: ChainDetailPopupProps) {
 
   return (
     <div className="chain-detail-popup">
+      {toast && <div className="copy-toast">{toast}</div>}
       <div className="popup-header">{chain.chainName}</div>
 
       <div className="popup-grid">
@@ -58,7 +63,7 @@ export function ChainDetailPopup({ chain }: ChainDetailPopupProps) {
           <span className="popup-label">Blockchain ID</span>
           <span
             className="popup-value copyable mono"
-            onClick={(e) => copyToClipboard(chain.blockchainId, e)}
+            onClick={(e) => copyToClipboard(chain.blockchainId, 'Blockchain ID', e)}
             title="Click to copy"
           >
             {chain.blockchainId.slice(0, 10)}...
@@ -69,7 +74,7 @@ export function ChainDetailPopup({ chain }: ChainDetailPopupProps) {
           <span className="popup-label">Subnet ID</span>
           <span
             className="popup-value copyable mono"
-            onClick={(e) => copyToClipboard(chain.subnetId, e)}
+            onClick={(e) => copyToClipboard(chain.subnetId, 'Subnet ID', e)}
             title="Click to copy"
           >
             {chain.subnetId.slice(0, 10)}...
@@ -81,7 +86,7 @@ export function ChainDetailPopup({ chain }: ChainDetailPopupProps) {
             <span className="popup-label">RPC</span>
             <span
               className="popup-value copyable"
-              onClick={(e) => copyToClipboard(chain.rpcUrl!, e)}
+              onClick={(e) => copyToClipboard(chain.rpcUrl!, 'RPC URL', e)}
               title="Click to copy"
             >
               {chain.rpcUrl.length > 35 ? chain.rpcUrl.slice(0, 35) + '...' : chain.rpcUrl}
