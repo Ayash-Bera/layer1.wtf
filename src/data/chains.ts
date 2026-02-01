@@ -1,14 +1,24 @@
+export interface NativeToken {
+  symbol?: string
+  name?: string
+  decimals?: number
+  logoUri?: string
+}
+
 export interface Chain {
   chainName: string
   blockchainId: string
   subnetId: string
   rpcUrl: string | null
   evmChainId: string | null
-  blocksCount: string | null
-  estimatedTxCount: string | null
-  glacierChainId?: string
-  comment: string | null
-  debugEnabled: boolean
+  vmName: string | null
+  isL1: boolean
+  logo: string | null
+  description: string | null
+  explorerUrl: string | null
+  website: string | null
+  nativeToken: NativeToken | null
+  categories: string[]
 }
 
 import chainsData from './chains.json'

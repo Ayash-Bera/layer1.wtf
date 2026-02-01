@@ -4,14 +4,22 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "build:chains": "node scripts/build-chains.cjs",
+    "validate:rpcs": "node scripts/validate-rpcs.cjs",
+    "predev": "npm run build:chains",
     "dev": "vite",
     "dev:proxy": "node proxy-server.js",
+    "prebuild": "npm run build:chains",
     "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tippyjs/react": "^4.2.6",
+    "l1beat-l1-registry": "^1.2.3",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
+    "sparklines": "^1.3.0",
+    "tippy.js": "^6.3.7",
     "vault66-crt-effect": "^2.0.0"
   },
   "devDependencies": {

@@ -66,4 +66,5 @@ export interface ChainBlockData {
   loading: boolean
   error: string | null
   lastUpdated: number
+  tpsHistory?: number[]
 }

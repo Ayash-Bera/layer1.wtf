@@ -15,7 +15,9 @@ interface MetricsPanelProps {
 
 export function MetricsPanel({ metrics, loading, chainData }: MetricsPanelProps) {
   // Find C-Chain data for comparison
-  const cChainData = chainData.find(chain => chain.chainName === 'C-Chain')
+  const cChainData = chainData.find(chain =>
+    chain.chainName === 'C-Chain' || chain.chainName === 'Avalanche C-Chain'
+  )
 
   // Calculate total KB/s
   const totalKbPerSecond = chainData.reduce((sum, chain) => {
