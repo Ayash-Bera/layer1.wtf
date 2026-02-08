@@ -274,24 +274,7 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, v
         }
 
         if (chain.error) {
-          return (
-            <ChainRow 
-              key={chain.blockchainId}
-              chain={chain}
-              isCChain={isCChain}
-              chainClass={`${chainClass} error-row`}
-              isHighlighted={false}
-              onHover={handleHover}
-              onClick={handleClick}
-            >
-              <div className="cell network-cell">
-                <span className="network-name">{chain.chainName}</span>
-              </div>
-              <div className="cell error-cell" style={{ gridColumn: 'span 9' }}>
-                Error
-              </div>
-            </ChainRow>
-          )
+          return null
         }
 
         if (!chain.blockData) {
