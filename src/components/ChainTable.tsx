@@ -56,6 +56,8 @@ const SparklineChart = ({ data, width = 120, height = 16, color = '#a8e6b0' }: S
 interface ChainTableProps {
   chainData: ChainBlockData[]
   loading: boolean
+  validatorCounts: Record<string, number>
+  icmCounts: Record<string, number>
   onRefresh: () => void
 }
 
@@ -84,7 +86,7 @@ const ChainRow = ({ chain, isCChain, chainClass, isHighlighted, children, onHove
   )
 }
 
-export const ChainTable = React.memo(function ChainTable({ chainData, loading, onRefresh }: ChainTableProps) {
+export const ChainTable = React.memo(function ChainTable({ chainData, loading, validatorCounts, icmCounts, onRefresh }: ChainTableProps) {
   const [hoveredChain, setHoveredChain] = useState<Chain | null>(null)
   const [pinnedChain, setPinnedChain] = useState<Chain | null>(null)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
@@ -241,6 +243,8 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
         const isHighlighted = chain.blockchainId === highestTpsId && highestTps > 0
         const meta = chains.find(c => c.chainName === chain.chainName)
         const networkType = meta?.categories?.includes('L0') ? 'primary' : (meta?.isL1 ? 'avalanche-l1' : 'Legacy Subnet')
+        const validatorCount = validatorCounts[chain.chainName] ?? validatorCounts[chain.blockchainId] ?? null
+        const icmRate = icmCounts[chain.chainName] ?? icmCounts[meta?.chainName || ''] ?? null
 
         if (chain.loading) {
           return (
@@ -258,8 +262,8 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
               </div>
               <div className="cell numeric-cell block-cell">...</div>
               <div className="cell">{meta?.nativeToken?.symbol || '-'}</div>
-              <div className="cell numeric-cell">N/A</div>
-              <div className="cell numeric-cell">N/A</div>
+              <div className="cell numeric-cell">{icmRate !== null ? icmRate.toFixed(2) : '-'}</div>
+              <div className="cell numeric-cell">{validatorCount !== null ? validatorCount : '-'}</div>
               <div className="cell numeric-cell tps-cell">-</div>
               <div className="cell numeric-cell mgas-cell">-</div>
               <div className="cell numeric-cell kbs-cell">-</div>
@@ -306,8 +310,8 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
               </div>
               <div className="cell numeric-cell block-cell">-</div>
               <div className="cell">{meta?.nativeToken?.symbol || '-'}</div>
-              <div className="cell numeric-cell">N/A</div>
-              <div className="cell numeric-cell">N/A</div>
+              <div className="cell numeric-cell">{icmRate !== null ? icmRate.toFixed(2) : '-'}</div>
+              <div className="cell numeric-cell">{validatorCount !== null ? validatorCount : '-'}</div>
               <div className="cell numeric-cell tps-cell">-</div>
               <div className="cell numeric-cell mgas-cell">-</div>
               <div className="cell numeric-cell kbs-cell">-</div>
@@ -341,8 +345,8 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, o
               <AnimatedCounter value={blockNumber} decimals={0} />
             </div>
             <div className="cell">{meta?.nativeToken?.symbol || '-'}</div>
-            <div className="cell numeric-cell">N/A</div>
-            <div className="cell numeric-cell">N/A</div>
+            <div className="cell numeric-cell">{icmRate !== null ? icmRate.toFixed(2) : '-'}</div>
+            <div className="cell numeric-cell">{validatorCount !== null ? validatorCount : '-'}</div>
             <div className="cell numeric-cell tps-cell">
               <AnimatedCounter value={tps} decimals={1} />
             </div>
