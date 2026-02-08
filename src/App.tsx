@@ -34,14 +34,21 @@ function App() {
       if (icmRes.status === 'fulfilled' && icmRes.value?.data) {
         const counts: Record<string, number> = {}
         const timeWindow = icmRes.value.metadata?.timeWindow || 24
-        const secondsInWindow = timeWindow * 3600
         for (const msg of icmRes.value.data) {
           counts[msg.sourceChain] = (counts[msg.sourceChain] || 0) + msg.messageCount
           counts[msg.destinationChain] = (counts[msg.destinationChain] || 0) + msg.messageCount
         }
-        // Convert to per-second rate
+        // Convert to per-hour rate
         for (const key of Object.keys(counts)) {
-          counts[key] = counts[key] / secondsInWindow
+          counts[key] = counts[key] / timeWindow
+        }
+        // Also index by evmChainId using validator chain data for better matching
+        if (validatorRes.status === 'fulfilled' && validatorRes.value?.data?.allChains) {
+          for (const chain of validatorRes.value.data.allChains) {
+            if (chain.evmChainId && counts[chain.chainName] !== undefined) {
+              counts[String(chain.evmChainId)] = counts[chain.chainName]
+            }
+          }
         }
         setIcmCounts(counts)
       }
