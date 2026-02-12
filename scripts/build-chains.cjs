@@ -107,11 +107,12 @@ function buildChains() {
     }
   }
 
-  // Apply RPC status filtering - null out invalid RPCs
+  // Apply RPC status filtering - null out invalid or untested RPCs
   if (rpcStatus) {
     for (const chain of allChains) {
+      if (!chain.rpcUrl) continue;
       const status = rpcStatus[chain.blockchainId];
-      if (status && !status.valid && chain.rpcUrl) {
+      if (!status || !status.valid) {
         chain.rpcUrl = null;
         rpcFiltered++;
       }
