@@ -807,17 +807,14 @@ body {
     font-size: 15px;
   }
 
-  /* Hide sparkline, stack, token columns */
-  .col-sparkline,
-  .col-stack,
-  .col-token {
-    display: none;
+  .chain-table {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .table-header,
   .table-row {
-    grid-template-columns: 2fr 1.2fr 0.8fr 1fr 0.9fr 0.7fr 1fr;
-    font-size: 11px;
+    min-width: 1100px;
   }
 
   .cell {
@@ -828,10 +825,6 @@ body {
 @media (max-width: 700px) {
   .app {
     padding: 4px 6px;
-  }
-
-  .tabs-section {
-    flex-direction: row;
   }
 
   .tab {
@@ -869,19 +862,6 @@ body {
 
   .metric-change {
     font-size: 10px;
-  }
-
-  /* Also hide block, ICM, validators columns */
-  .col-block,
-  .col-icm,
-  .col-validators {
-    display: none;
-  }
-
-  .table-header,
-  .table-row {
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    font-size: 11px;
   }
 
   .chain-popup-wrapper {
