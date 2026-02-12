@@ -175,15 +175,15 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, v
       <div className="chain-table">
         <div className="table-header">
           <div className="header-cell sortable">Network</div>
-          <div className="header-cell sortable header-block">Block</div>
+          <div className="header-cell sortable header-block col-block">Block</div>
           <div className="header-cell sortable header-tps">TPS</div>
           <div className="header-cell sortable header-mgas">Mgas/s</div>
           <div className="header-cell sortable header-kbs">KB/s</div>
-          <div className="header-cell numeric-cell">ICM/d</div>
-          <div className="header-cell numeric-cell">Validators</div>
-          <div className="header-cell header-stack">Stack</div>
-          <div className="header-cell">Token</div>
-          <div className="header-cell header-sparkline">TPS Graph</div>
+          <div className="header-cell numeric-cell col-icm">ICM/d</div>
+          <div className="header-cell numeric-cell col-validators">Validators</div>
+          <div className="header-cell header-stack col-stack">Stack</div>
+          <div className="header-cell col-token">Token</div>
+          <div className="header-cell header-sparkline col-sparkline">TPS Graph</div>
         </div>
         <div className="loading-row">Loading chain data...</div>
       </div>
@@ -195,15 +195,15 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, v
       <div className="chain-table">
         <div className="table-header">
           <div className="header-cell sortable">Network</div>
-          <div className="header-cell sortable header-block">Block</div>
+          <div className="header-cell sortable header-block col-block">Block</div>
           <div className="header-cell sortable header-tps">TPS</div>
           <div className="header-cell sortable header-mgas">Mgas/s</div>
           <div className="header-cell sortable header-kbs">KB/s</div>
-          <div className="header-cell numeric-cell">ICM/d</div>
-          <div className="header-cell numeric-cell">Validators</div>
-          <div className="header-cell header-stack">Stack</div>
-          <div className="header-cell">Token</div>
-          <div className="header-cell header-sparkline">TPS Graph</div>
+          <div className="header-cell numeric-cell col-icm">ICM/d</div>
+          <div className="header-cell numeric-cell col-validators">Validators</div>
+          <div className="header-cell header-stack col-stack">Stack</div>
+          <div className="header-cell col-token">Token</div>
+          <div className="header-cell header-sparkline col-sparkline">TPS Graph</div>
         </div>
         <div className="no-data">No data available</div>
       </div>
@@ -226,15 +226,15 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, v
     <div className="chain-table" onMouseMove={handleMouseMove}>
       <div className="table-header">
         <div className="header-cell sortable">Network</div>
-        <div className="header-cell sortable header-block">Block</div>
+        <div className="header-cell sortable header-block col-block">Block</div>
         <div className="header-cell sortable header-tps">TPS</div>
         <div className="header-cell sortable header-mgas">Mgas/s ^</div>
         <div className="header-cell sortable header-kbs">KB/s</div>
-        <div className="header-cell numeric-cell">ICM/d</div>
-        <div className="header-cell numeric-cell">Validators</div>
-        <div className="header-cell header-stack">Stack</div>
-        <div className="header-cell">Token</div>
-        <div className="header-cell header-sparkline">TPS Graph</div>
+        <div className="header-cell numeric-cell col-icm">ICM/d</div>
+        <div className="header-cell numeric-cell col-validators">Validators</div>
+        <div className="header-cell header-stack col-stack">Stack</div>
+        <div className="header-cell col-token">Token</div>
+        <div className="header-cell header-sparkline col-sparkline">TPS Graph</div>
       </div>
 
       {chainData.map((chain) => {
@@ -260,15 +260,15 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, v
               <div className="cell network-cell">
                 <span className="network-name">{chain.chainName}</span>
               </div>
-              <div className="cell numeric-cell block-cell">...</div>
+              <div className="cell numeric-cell block-cell col-block">...</div>
               <div className="cell numeric-cell tps-cell">-</div>
               <div className="cell numeric-cell mgas-cell">-</div>
               <div className="cell numeric-cell kbs-cell">-</div>
-              <div className="cell numeric-cell">{icmRate !== null ? Math.round(icmRate) : '-'}</div>
-              <div className="cell numeric-cell">{validatorCount !== null ? validatorCount : '-'}</div>
-              <div className="cell stack-cell">{networkType}</div>
-              <div className="cell">{meta?.nativeToken?.symbol || '-'}</div>
-              <div className="cell sparkline-cell"></div>
+              <div className="cell numeric-cell col-icm">{icmRate !== null ? Math.round(icmRate) : '-'}</div>
+              <div className="cell numeric-cell col-validators">{validatorCount !== null ? validatorCount : '-'}</div>
+              <div className="cell stack-cell col-stack">{networkType}</div>
+              <div className="cell token-cell col-token">{meta?.nativeToken?.symbol || '-'}</div>
+              <div className="cell sparkline-cell col-sparkline"></div>
             </ChainRow>
           )
         }
@@ -291,15 +291,15 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, v
               <div className="cell network-cell">
                 <span className="network-name">{chain.chainName}</span>
               </div>
-              <div className="cell numeric-cell block-cell">-</div>
+              <div className="cell numeric-cell block-cell col-block">-</div>
               <div className="cell numeric-cell tps-cell">-</div>
               <div className="cell numeric-cell mgas-cell">-</div>
               <div className="cell numeric-cell kbs-cell">-</div>
-              <div className="cell numeric-cell">{icmRate !== null ? Math.round(icmRate) : '-'}</div>
-              <div className="cell numeric-cell">{validatorCount !== null ? validatorCount : '-'}</div>
-              <div className="cell stack-cell">{networkType}</div>
-              <div className="cell">{meta?.nativeToken?.symbol || '-'}</div>
-              <div className="cell sparkline-cell"></div>
+              <div className="cell numeric-cell col-icm">{icmRate !== null ? Math.round(icmRate) : '-'}</div>
+              <div className="cell numeric-cell col-validators">{validatorCount !== null ? validatorCount : '-'}</div>
+              <div className="cell stack-cell col-stack">{networkType}</div>
+              <div className="cell token-cell col-token">{meta?.nativeToken?.symbol || '-'}</div>
+              <div className="cell sparkline-cell col-sparkline"></div>
             </ChainRow>
           )
         }
@@ -324,7 +324,7 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, v
             <div className="cell network-cell">
               <span className="network-name">{chain.chainName}</span>
             </div>
-            <div className="cell numeric-cell block-cell">
+            <div className="cell numeric-cell block-cell col-block">
               <AnimatedCounter value={blockNumber} decimals={0} />
             </div>
             <div className="cell numeric-cell tps-cell">
@@ -336,11 +336,11 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, v
             <div className="cell numeric-cell kbs-cell">
               <AnimatedCounter value={kbPerSecond} decimals={2} />
             </div>
-            <div className="cell numeric-cell">{icmRate !== null ? Math.round(icmRate) : '-'}</div>
-            <div className="cell numeric-cell">{validatorCount !== null ? validatorCount : '-'}</div>
-            <div className="cell stack-cell">{networkType}</div>
-            <div className="cell">{meta?.nativeToken?.symbol || '-'}</div>
-            <div className="cell sparkline-cell">
+            <div className="cell numeric-cell col-icm">{icmRate !== null ? Math.round(icmRate) : '-'}</div>
+            <div className="cell numeric-cell col-validators">{validatorCount !== null ? validatorCount : '-'}</div>
+            <div className="cell stack-cell col-stack">{networkType}</div>
+            <div className="cell token-cell col-token">{meta?.nativeToken?.symbol || '-'}</div>
+            <div className="cell sparkline-cell col-sparkline">
               <SparklineChart data={chain.tpsHistory || []} />
             </div>
           </ChainRow>

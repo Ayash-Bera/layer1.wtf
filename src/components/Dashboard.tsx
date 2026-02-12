@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { ChainBlockData } from "../types";
 import { MetricsPanel } from "./MetricsPanel";
 import { ChainTable } from "./ChainTable";
 import { ErrorDialog } from "./ErrorDialog";
 import { useState } from "react";
+import { chains } from "../data/chains";
+
+const INFRASTRUCTURE_CATEGORIES = new Set(["L0", "L1", "EVM"]);
+const STACK_OPTIONS = ["primary", "avalanche-l1", "Legacy Subnet"] as const;
 
 interface DashboardProps {
   chainData: ChainBlockData[];
@@ -13,8 +17,26 @@ interface DashboardProps {
   onRefresh: () => void;
 }
 
+function getStackType(chainName: string): string {
+  const meta = chains.find((c) => c.chainName === chainName);
+  if (meta?.categories?.includes("L0")) return "primary";
+  if (meta?.isL1) return "avalanche-l1";
+  return "Legacy Subnet";
+}
+
+function getChainCategories(chainName: string): string[] {
+  const meta = chains.find((c) => c.chainName === chainName);
+  if (!meta?.categories) return [];
+  return meta.categories
+    .map((c) => c.toUpperCase())
+    .filter((c) => !INFRASTRUCTURE_CATEGORIES.has(c));
+}
+
 export function Dashboard({ chainData, loading, validatorCounts, icmCounts, onRefresh }: DashboardProps) {
   const [showErrorDialog, setShowErrorDialog] = useState(false);
+  const [filtersExpanded, setFiltersExpanded] = useState(false);
+  const [selectedStacks, setSelectedStacks] = useState<Set<string>>(new Set());
+  const [selectedCategories, setSelectedCategories] = useState<Set<string>>(new Set());
 
   const handleIcmClick = () => {
     setShowErrorDialog(true);
@@ -34,11 +56,39 @@ export function Dashboard({ chainData, loading, validatorCounts, icmCounts, onRe
     return b.lastUpdated - a.lastUpdated;
   });
 
-  // Calculate aggregate metrics
+  // Compute unique categories from active chains
+  const availableCategories = useMemo(() => {
+    const catSet = new Set<string>();
+    for (const chain of sortedChainData) {
+      for (const cat of getChainCategories(chain.chainName)) {
+        catSet.add(cat);
+      }
+    }
+    return [...catSet].sort();
+  }, [sortedChainData]);
+
+  // Filter chain data based on selected stacks and categories
+  const filteredChainData = useMemo(() => {
+    return sortedChainData.filter((chain) => {
+      // Stack filter (OR within group, empty = show all)
+      if (selectedStacks.size > 0) {
+        const stack = getStackType(chain.chainName);
+        if (!selectedStacks.has(stack)) return false;
+      }
+      // Categories filter (OR within group, empty = show all)
+      if (selectedCategories.size > 0) {
+        const cats = getChainCategories(chain.chainName);
+        if (!cats.some((c) => selectedCategories.has(c))) return false;
+      }
+      return true;
+    });
+  }, [sortedChainData, selectedStacks, selectedCategories]);
+
+  // Calculate aggregate metrics from filtered data
   const metrics =
-    sortedChainData.length > 0
+    filteredChainData.length > 0
       ? {
-          totalTps: sortedChainData.reduce((sum, chain) => {
+          totalTps: filteredChainData.reduce((sum, chain) => {
             const oneHourAgo = Math.floor(Date.now() / 1000) - 3600;
             if (chain.blockData && !chain.loading && !chain.error) {
               const blockTimestamp = parseInt(chain.blockData.timestamp, 16);
@@ -49,7 +99,7 @@ export function Dashboard({ chainData, loading, validatorCounts, icmCounts, onRe
             }
             return sum;
           }, 0),
-          totalGasPerSecond: sortedChainData.reduce((sum, chain) => {
+          totalGasPerSecond: filteredChainData.reduce((sum, chain) => {
             const oneHourAgo = Math.floor(Date.now() / 1000) - 3600;
             if (chain.blockData && !chain.loading && !chain.error) {
               const blockTimestamp = parseInt(chain.blockData.timestamp, 16);
@@ -62,7 +112,7 @@ export function Dashboard({ chainData, loading, validatorCounts, icmCounts, onRe
           }, 0),
           averageUtilization: (() => {
             const oneHourAgo = Math.floor(Date.now() / 1000) - 3600;
-            const recentChains = sortedChainData.filter(
+            const recentChains = filteredChainData.filter(
               (chain) =>
                 chain.blockData &&
                 !chain.loading &&
@@ -83,6 +133,24 @@ export function Dashboard({ chainData, loading, validatorCounts, icmCounts, onRe
         }
       : null;
 
+  const toggleStack = (stack: string) => {
+    setSelectedStacks((prev) => {
+      const next = new Set(prev);
+      if (next.has(stack)) next.delete(stack);
+      else next.add(stack);
+      return next;
+    });
+  };
+
+  const toggleCategory = (cat: string) => {
+    setSelectedCategories((prev) => {
+      const next = new Set(prev);
+      if (next.has(cat)) next.delete(cat);
+      else next.add(cat);
+      return next;
+    });
+  };
+
   return (
     <div className="app">
       {/* Header - Outside container */}
@@ -102,23 +170,60 @@ export function Dashboard({ chainData, loading, validatorCounts, icmCounts, onRe
 
         {/* Totals */}
         <div className="totals-section">
-          <div className="totals-header">Totals</div>
+          <div className="totals-header">Metrics Panel</div>
           <MetricsPanel
             metrics={metrics}
             loading={loading}
-            chainData={sortedChainData}
+            chainData={filteredChainData}
           />
         </div>
 
         {/* Filters */}
         <div className="filters-section">
           <div className="filters-header">Filters</div>
-          <button className="expand-button">Expand</button>
+          <button
+            className="expand-button"
+            onClick={() => setFiltersExpanded(!filtersExpanded)}
+          >
+            {filtersExpanded ? "Collapse" : "Expand"}
+          </button>
+          {filtersExpanded && (
+            <div className="filters-panel">
+              <div className="filter-group">
+                <div className="filter-group-title">Stack</div>
+                <div className="filter-tags">
+                  {STACK_OPTIONS.map((stack) => (
+                    <span
+                      key={stack}
+                      className={`filter-tag${selectedStacks.has(stack) ? " active" : ""}`}
+                      onClick={() => toggleStack(stack)}
+                    >
+                      {stack}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div className="filter-group">
+                <div className="filter-group-title">Categories</div>
+                <div className="filter-tags">
+                  {availableCategories.map((cat) => (
+                    <span
+                      key={cat}
+                      className={`filter-tag${selectedCategories.has(cat) ? " active" : ""}`}
+                      onClick={() => toggleCategory(cat)}
+                    >
+                      {cat}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Table */}
         <ChainTable
-          chainData={sortedChainData}
+          chainData={filteredChainData}
           loading={loading}
           validatorCounts={validatorCounts}
           icmCounts={icmCounts}

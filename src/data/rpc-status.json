@@ -1,411 +1,285 @@
 {
-  "lastUpdated": "2026-02-12T21:33:14.689Z",
+  "lastUpdated": "2026-02-12T22:29:02.202Z",
   "chains": {
     "2q1BQuzcC9wgrb4icy8XD9ZXS8AxUscQNxLA2J2zTJA6hZgjwE": {
       "chainName": "Andromeda",
       "rpcUrl": "https://subnets.avax.network/andromeda/mainnet/rpc",
       "valid": true,
-      "blockNumber": 355971,
-      "checkedAt": "2026-02-12T21:33:15.158Z"
+      "blockNumber": 357630,
+      "checkedAt": "2026-02-12T22:29:02.739Z"
     },
     "rBabVhbJKGcKTEpzm9PdpQ7ModsxNpYQZ6ALN6g9p5JKjqfw6": {
       "chainName": "Artery",
       "rpcUrl": "https://subnets.avax.network/artery/mainnet/rpc",
       "valid": true,
-      "blockNumber": 6922468,
-      "checkedAt": "2026-02-12T21:33:15.504Z"
+      "blockNumber": 6923715,
+      "checkedAt": "2026-02-12T22:29:03.064Z"
     },
     "2q9e4r6Mu3U68nU1fYjgbR6JvwrRx36CohpAX5UQxse55x1Q5": {
       "chainName": "Avalanche C-Chain",
       "rpcUrl": "https://api.avax.network/ext/bc/C/rpc",
       "valid": true,
-      "blockNumber": 77920388,
-      "checkedAt": "2026-02-12T21:33:15.758Z"
+      "blockNumber": 77923599,
+      "checkedAt": "2026-02-12T22:29:03.255Z"
     },
     "2tmrrBo1Lgt1mzzvPSFt73kkQKFas5d1AP88tv9cicwoFp8BSn": {
       "chainName": "beam",
       "rpcUrl": "https://subnets.avax.network/beam/mainnet/rpc",
       "valid": true,
-      "blockNumber": 7962968,
-      "checkedAt": "2026-02-12T21:33:15.961Z"
+      "blockNumber": 7963327,
+      "checkedAt": "2026-02-12T22:29:03.396Z"
     },
     "2SfshBPqRJexmqdWBY2xYSTq2Rp2dDisuax7nQB6GyNqPjSWWY": {
       "chainName": "Blaze",
       "rpcUrl": "https://subnets.avax.network/blaze/mainnet/rpc",
       "valid": true,
-      "blockNumber": 111192,
-      "checkedAt": "2026-02-12T21:33:16.286Z"
-    },
-    "2QGraMRcH8gEnQbLviM4ykgyY31jFfLhaEtEvPHk8q8pPfe7Kj": {
-      "chainName": "BLITZ SUBNET",
-      "rpcUrl": "https://subnets.avax.network/blitz/mainnet/rpc",
-      "valid": false,
-      "error": "HTTP 405",
-      "checkedAt": "2026-02-12T21:33:16.362Z"
+      "blockNumber": 111324,
+      "checkedAt": "2026-02-12T22:29:03.741Z"
     },
     "2pV5K35V1ohNSYhRU3z1Bud2oZys9bak7QYcmvbVvnieh4FJXc": {
       "chainName": "Blockticity",
       "rpcUrl": "https://subnets.avax.network/btic/mainnet/rpc",
       "valid": true,
-      "blockNumber": 362532,
-      "checkedAt": "2026-02-12T21:33:16.739Z"
-    },
-    "J3MYb3rDARLmB7FrRybinyjKqVTqmerbCr9bAXDatrSaHiLxQ": {
-      "chainName": "BnryMainnet",
-      "rpcUrl": "https://rpc-archive-mainnetbinaryholdings.cogitus.io/ext/bc/J3MYb3rDARLmB7FrRybinyjKqVTqmerbCr9bAXDatrSaHiLxQ/rpc",
-      "valid": false,
-      "error": "fetch failed",
-      "checkedAt": "2026-02-12T21:33:16.883Z"
-    },
-    "21wWGaE2vXSeJqfYwyiMukJuP866jFfKNYkCLXmhx9SZakh11G": {
-      "chainName": "cloudverse",
-      "rpcUrl": "https://subnets.avax.network/cloudverse/mainnet/rpc",
-      "valid": false,
-      "error": "HTTP 500",
-      "checkedAt": "2026-02-12T21:33:17.840Z"
-    },
-    "23aQU1537YseCJmXW11XHjPra6bptBSps5D4xXupt8hN2QUeaG": {
-      "chainName": "Coqnet",
-      "rpcUrl": "https://subnets.avax.network/coqnet/mainnet/rpc",
-      "valid": false,
-      "error": "HTTP 405",
-      "checkedAt": "2026-02-12T21:33:17.900Z"
+      "blockNumber": 362839,
+      "checkedAt": "2026-02-12T22:29:04.087Z"
     },
     "25xjR3fvh7aXkxs36n1xRc3wLUAuqnS1wBxJD1BC4z3y6mHsEV": {
       "chainName": "CX",
       "rpcUrl": "https://subnets.avax.network/cx/mainnet/rpc",
       "valid": true,
-      "blockNumber": 495364,
-      "checkedAt": "2026-02-12T21:33:18.297Z"
+      "blockNumber": 495520,
+      "checkedAt": "2026-02-12T22:29:04.372Z"
     },
     "21Ths5Afqi5r4PaoV8r8cruGZWhN11y5rxvy89K8px7pKy3P8E": {
       "chainName": "dexalotevm",
       "rpcUrl": "https://subnets.avax.network/dexalot/mainnet/rpc",
       "valid": true,
-      "blockNumber": 57902541,
-      "checkedAt": "2026-02-12T21:33:18.469Z"
+      "blockNumber": 57905596,
+      "checkedAt": "2026-02-12T22:29:04.526Z"
     },
     "q2aTwKuyzgs8pynF7UXBZCU7DejbZbZ6EUyHr3JQzYgwNPUPi": {
       "chainName": "DFK Chain",
       "rpcUrl": "https://subnets.avax.network/defi-kingdoms/dfk-chain/rpc",
       "valid": true,
-      "blockNumber": 59052944,
-      "checkedAt": "2026-02-12T21:33:18.816Z"
+      "blockNumber": 59054609,
+      "checkedAt": "2026-02-12T22:29:04.832Z"
     },
     "C5GXnNHNEfDxUydtjZ5B5J6XspdAZJGLsX3u4wxCXZgE3N4Gq": {
       "chainName": "Dinari Financial Network",
       "rpcUrl": "https://subnets.avax.network/dinari/mainnet/rpc",
       "valid": true,
-      "blockNumber": 832820,
-      "checkedAt": "2026-02-12T21:33:19.167Z"
+      "blockNumber": 833226,
+      "checkedAt": "2026-02-12T22:29:05.116Z"
     },
     "22v7AG7h6qaVxd4bLvAsSsg2LZ4RCn5iVYgFn7a2Fj1LCuYwjv": {
       "chainName": "DOS Chain",
       "rpcUrl": "https://main.doschain.com",
       "valid": true,
       "blockNumber": 2273699,
-      "checkedAt": "2026-02-12T21:33:20.443Z"
-    },
-    "2R87vuaaRZRxPLdvdMEpo7fH9qyyNnP34h4nyxuwq8sKkQ1GaE": {
-      "chainName": "EthixEtx",
-      "rpcUrl": "https://subnets.avax.network/etx/mainnet/rpc",
-      "valid": false,
-      "error": "HTTP 405",
-      "checkedAt": "2026-02-12T21:33:20.499Z"
+      "checkedAt": "2026-02-12T22:29:05.839Z"
     },
     "2YnwDMW9shSuV6nuYpAhm3DE2KvYJP2GFDvUde6XG8jE5gxvpL": {
       "chainName": "EVEN",
       "rpcUrl": "https://subnets.avax.network/even/mainnet/rpc",
       "valid": true,
       "blockNumber": 293160,
-      "checkedAt": "2026-02-12T21:33:20.878Z"
+      "checkedAt": "2026-02-12T22:29:06.172Z"
     },
     "txbozTNfyRgJJxtHmsbpvwTTWTHU739z7pX7qKdhJVxHC2MAk": {
       "chainName": "feature",
       "rpcUrl": "https://subnets.avax.network/feature/mainnet/rpc",
       "valid": true,
       "blockNumber": 3090,
-      "checkedAt": "2026-02-12T21:33:21.402Z"
+      "checkedAt": "2026-02-12T22:29:06.939Z"
     },
     "SUDoK9P89PCcguskyof41fZexw7U3zubDP2DZpGf3HbFWwJ4E": {
       "chainName": "FIFA",
       "rpcUrl": "https://subnets.avax.network/fifa/mainnet/rpc",
       "valid": true,
-      "blockNumber": 573694,
-      "checkedAt": "2026-02-12T21:33:21.717Z"
+      "blockNumber": 573702,
+      "checkedAt": "2026-02-12T22:29:07.244Z"
     },
     "2JepXG35p5i21VxbnPx1eWmu5Z5EutcSXVAtcisBBJPTYzAVmB": {
       "chainName": "FRQTAL",
       "rpcUrl": "https://subnets.avax.network/frqtalnet/mainnet/rpc",
       "valid": true,
       "blockNumber": 1142,
-      "checkedAt": "2026-02-12T21:33:22.038Z"
-    },
-    "8bvSiqVvhsyRLMo3osGgAwbjd8U7G4XUoTKAEJAWvowH1BHrB": {
-      "chainName": "greendot",
-      "rpcUrl": "https://subnets.avax.network/greendot/mainnet/rpc",
-      "valid": false,
-      "error": "HTTP 500",
-      "checkedAt": "2026-02-12T21:33:23.109Z"
+      "checkedAt": "2026-02-12T22:29:07.544Z"
     },
     "2M47TxWHGnhNtq6pM5zPXdATBtuqubxn5EPFgFmEawCQr9WFML": {
       "chainName": "GUNZ",
       "rpcUrl": "https://subnets.avax.network/gunzilla/mainnet/rpc",
       "valid": true,
-      "blockNumber": 15224201,
-      "checkedAt": "2026-02-12T21:33:23.396Z"
+      "blockNumber": 15225873,
+      "checkedAt": "2026-02-12T22:29:07.936Z"
     },
     "2vcBHFK7jiv74dyYeUCUiCsKy2jbWx6xEQzNfQPiLmYidBaDfX": {
       "chainName": "Hashfire",
       "rpcUrl": "https://subnets.avax.network/hashfire/mainnet/rpc",
       "valid": true,
       "blockNumber": 3217,
-      "checkedAt": "2026-02-12T21:33:23.701Z"
+      "checkedAt": "2026-02-12T22:29:08.266Z"
     },
     "2LFmzhHDKxkreihEtPanVmofuFn63bsh8twnRXEbDhBtCJxURB": {
       "chainName": "Henesys",
       "rpcUrl": "https://henesys-rpc.msu.io",
       "valid": true,
-      "blockNumber": 11127582,
-      "checkedAt": "2026-02-12T21:33:24.298Z"
+      "blockNumber": 11129134,
+      "checkedAt": "2026-02-12T22:29:08.856Z"
     },
     "vFHT9J4F6PhqCTMmqkKKUKW3yfsjd6tNvhmcK4MkFa3Pmnnqe": {
       "chainName": "InnovoMarketsMainnet",
       "rpcUrl": "https://subnets.avax.network/innovo/mainnet/rpc",
       "valid": true,
       "blockNumber": 2081,
-      "checkedAt": "2026-02-12T21:33:24.595Z"
-    },
-    "TT2vQnjSF9VZfjaA5dB1VNKVdqkVCDzSncxaMcGVwYedGaMG3": {
-      "chainName": "Kalichain",
-      "rpcUrl": "https://subnets.avax.network/kalichain/mainnet/rpc",
-      "valid": false,
-      "error": "HTTP 405",
-      "checkedAt": "2026-02-12T21:33:24.687Z"
+      "checkedAt": "2026-02-12T22:29:09.163Z"
     },
     "UhReZTXT8Cqsjat9ghRtCe5kBQPQexQB5zG5Fvf3egrdYfyoJ": {
       "chainName": "Lamina1",
       "rpcUrl": "https://subnets.avax.network/lamina1/mainnet/rpc",
       "valid": true,
-      "blockNumber": 14827529,
-      "checkedAt": "2026-02-12T21:33:24.982Z"
+      "blockNumber": 14827546,
+      "checkedAt": "2026-02-12T22:29:09.546Z"
     },
     "hR6djBP7uMGJnXrjdUic2rzvvuuMpqMWNb5us7j8xgmj6Ck2N": {
       "chainName": "Lamina1Identity",
       "rpcUrl": "https://subnets.avax.network/lamina1id/mainnet/rpc",
       "valid": true,
-      "blockNumber": 429862,
-      "checkedAt": "2026-02-12T21:33:25.466Z"
+      "blockNumber": 429919,
+      "checkedAt": "2026-02-12T22:29:09.880Z"
     },
     "29vwJsYDCuAHpCCGkvvWh8K2MiHAyCXYKUNobCMg4c7ZQvSkJu": {
       "chainName": "Letsbuyhealthcare",
       "rpcUrl": "https://subnets.avax.network/letsbuyhc/mainnet/rpc",
       "valid": true,
       "blockNumber": 2386,
-      "checkedAt": "2026-02-12T21:33:25.644Z"
+      "checkedAt": "2026-02-12T22:29:10.070Z"
     },
     "2rpeyPqn1Th7WsebmecpHgQEvFHWq3vzrcRi9vKgMc32rTjUKX": {
       "chainName": "Loyal",
       "rpcUrl": "https://subnets.avax.network/loyal/mainnet/rpc",
       "valid": true,
       "blockNumber": 226,
-      "checkedAt": "2026-02-12T21:33:26.355Z"
-    },
-    "2EpCcmHLNqFqbE6Ch1fX6VbgqFETtuKdn9dcBS375pXLN48NKC": {
-      "chainName": "MasaNetwork",
-      "rpcUrl": "https://subnets.avax.network/masanetwork/mainnet/rpc",
-      "valid": false,
-      "error": "HTTP 405",
-      "checkedAt": "2026-02-12T21:33:26.407Z"
-    },
-    "W6m4NgS2ie2LJerquYAt7V6fVXVAMmjvYFsWWtyjDY97exGTy": {
-      "chainName": "meld",
-      "rpcUrl": "https://subnets.avax.network/meld/mainnet/rpc",
-      "valid": false,
-      "error": "HTTP 500",
-      "checkedAt": "2026-02-12T21:33:26.646Z"
+      "checkedAt": "2026-02-12T22:29:10.416Z"
     },
     "2PDRxzc6jMbZSTLb3sufkVszgQc2jtDnYZGtDTAAfom1CTwPsE": {
       "chainName": "numbersevm",
       "rpcUrl": "https://mainnetrpc.num.network",
       "valid": true,
-      "blockNumber": 813789,
-      "checkedAt": "2026-02-12T21:33:27.599Z"
+      "blockNumber": 813808,
+      "checkedAt": "2026-02-12T22:29:11.301Z"
     },
     "2c1BN4N9qEhNmW4yCpeLK24SfjFQLyS1Z7FtgRDaYxZWFUUKxf": {
       "chainName": "numine",
       "rpcUrl": "https://subnets.avax.network/numi/mainnet/rpc",
       "valid": true,
-      "blockNumber": 541200,
-      "checkedAt": "2026-02-12T21:33:27.987Z"
-    },
-    "2pdeYfs5hRYDM63ETuPN9YFWohEXehuhkAMsvYETyrsjbReK9q": {
-      "chainName": "ONIGIRI",
-      "rpcUrl": "https://subnets.avax.network/onigiri/mainnet/rpc",
-      "valid": false,
-      "error": "HTTP 405",
-      "checkedAt": "2026-02-12T21:33:28.040Z"
+      "blockNumber": 541274,
+      "checkedAt": "2026-02-12T22:29:11.677Z"
     },
     "AowVWzuCAyLrTPSLHHaHeMJSdxRhhWbvmEuXncPnKv1hT5wf4": {
       "chainName": "Orange",
       "rpcUrl": "https://subnets.avax.network/orange/mainnet/rpc",
       "valid": true,
-      "blockNumber": 3030306,
-      "checkedAt": "2026-02-12T21:33:28.599Z"
+      "blockNumber": 3031042,
+      "checkedAt": "2026-02-12T22:29:11.946Z"
     },
     "k2SFEZ2MZr9UGXiycnA1DdaLqZTKDaHK7WUXVLhJk5F9DD8r1": {
       "chainName": "PLAYA3ULL",
       "rpcUrl": "https://subnets.avax.network/playa3ull/mainnet/rpc",
       "valid": true,
-      "blockNumber": 3044519,
-      "checkedAt": "2026-02-12T21:33:28.921Z"
-    },
-    "jAvZZkDuokp67yH8QQm4AXv1qUm3fwhxUUo2mmMsmopdgHChp": {
-      "chainName": "PlaydappNetwork",
-      "rpcUrl": "https://subnets.avax.network/playdappne/mainnet/rpc",
-      "valid": false,
-      "error": "HTTP 405",
-      "checkedAt": "2026-02-12T21:33:28.978Z"
-    },
-    "HUwWdyoExrb1HgVp5X5sh3AWqhYFnKkfXBfGmGL3qjDsnMoR4": {
-      "chainName": "PLYRPHI",
-      "rpcUrl": "https://subnets.avax.network/plyr/mainnet/rpc",
-      "valid": false,
-      "error": "HTTP 405",
-      "checkedAt": "2026-02-12T21:33:29.026Z"
-    },
-    "QVbrD172sAF1TgCvN9DZG93nAd2YBGCJVZP4cngdEKCTy2F9v": {
-      "chainName": "Pulsar",
-      "rpcUrl": "https://subnets.avax.network/pulsar/mainnet/rpc",
-      "valid": false,
-      "error": "HTTP 405",
-      "checkedAt": "2026-02-12T21:33:29.109Z"
+      "blockNumber": 3044555,
+      "checkedAt": "2026-02-12T22:29:12.262Z"
     },
     "2GRw9HYnCxyVsr4P5pytpqcyRaymtnTuu1oZhuSWcP4DfJxojy": {
       "chainName": "QCHAIN",
       "rpcUrl": "https://subnets.avax.network/qchain/mainnet/rpc",
       "valid": true,
-      "blockNumber": 9733487,
-      "checkedAt": "2026-02-12T21:33:29.383Z"
-    },
-    "28Z2DcNiiV6dD5LAm1KNZGBmpbokWaHVBaTXV9HoUCh7o1ahEc": {
-      "chainName": "QRTMS",
-      "rpcUrl": "https://subnets.avax.network/qr0723t1ms/mainnet/rpc",
-      "valid": false,
-      "error": "HTTP 500",
-      "checkedAt": "2026-02-12T21:33:29.634Z"
-    },
-    "2gPHVXPoDvbt6MFUrGBYV5mApC9Y1Xckhdpr31cHzjcJyTAgrZ": {
-      "chainName": "REALLY",
-      "rpcUrl": "https://subnets.avax.network/really/mainnet/rpc",
-      "valid": false,
-      "error": "HTTP 405",
-      "checkedAt": "2026-02-12T21:33:29.675Z"
+      "blockNumber": 9733622,
+      "checkedAt": "2026-02-12T22:29:12.521Z"
     },
     "2tdRBvNEUhoD6ZWYF9b5NBdj5hHwWPfvSq1EnzvV8QU2XjLNy9": {
       "chainName": "shrapnelnetwork",
       "rpcUrl": "https://subnets.avax.network/shrapnel/mainnet/rpc",
       "valid": true,
-      "blockNumber": 7716122,
-      "checkedAt": "2026-02-12T21:33:29.903Z"
+      "blockNumber": 7716142,
+      "checkedAt": "2026-02-12T22:29:12.691Z"
     },
     "22CN6x5LAPEkvLDdz4UwG3XXtZV69Su3bcspiYtkF9k5f9rcCt": {
       "chainName": "Space",
       "rpcUrl": "https://subnets.avax.network/space/mainnet/rpc",
       "valid": true,
-      "blockNumber": 3243710,
-      "checkedAt": "2026-02-12T21:33:30.316Z"
+      "blockNumber": 3244017,
+      "checkedAt": "2026-02-12T22:29:12.942Z"
     },
     "2jRZvKtXY5nyWTqRwFh1KMHGrCRxJoULu4r2CsayWRnjdDGbV1": {
       "chainName": "StepNetwork",
       "rpcUrl": "https://rpc.step.network",
       "valid": true,
-      "blockNumber": 17071463,
-      "checkedAt": "2026-02-12T21:33:30.493Z"
+      "blockNumber": 17071695,
+      "checkedAt": "2026-02-12T22:29:13.237Z"
     },
     "EJ4DyXHe4ydhsLLMiDPsHtoq5RDqgyao6Lwb9znKhs59q4NQx": {
       "chainName": "StraitsX",
       "rpcUrl": "https://subnets.avax.network/straitsx/mainnet/rpc",
       "valid": true,
-      "blockNumber": 394220,
-      "checkedAt": "2026-02-12T21:33:30.839Z"
+      "blockNumber": 394226,
+      "checkedAt": "2026-02-12T22:29:13.494Z"
     },
     "2DnTLFrwyrvDDdWWzXBZqnNZXsHbLDGBU2kkrenaF5M5xFgbDY": {
       "chainName": "The Growth Protocol",
       "rpcUrl": "https://subnets.avax.network/tgp/mainnet/rpc",
       "valid": true,
-      "blockNumber": 14270168,
-      "checkedAt": "2026-02-12T21:33:31.104Z"
+      "blockNumber": 14271839,
+      "checkedAt": "2026-02-12T22:29:13.772Z"
     },
     "2Ldubr6779M2PWhY3ECsBx5kb85pGY4euCWZLdaaE9o7ocSHMC": {
       "chainName": "The LYLTY Economy",
       "rpcUrl": "https://subnets.avax.network/lylty/mainnet/rpc",
       "valid": true,
-      "blockNumber": 885276,
-      "checkedAt": "2026-02-12T21:33:31.364Z"
+      "blockNumber": 885449,
+      "checkedAt": "2026-02-12T22:29:13.899Z"
     },
     "axF6i526AKGeduJeA6PQ8ewGQhtLoy2VFgxR9fknWnpf8iiFD": {
       "chainName": "TheGrotto",
       "rpcUrl": "https://subnets.avax.network/thegrotto/mainnet/rpc",
       "valid": true,
-      "blockNumber": 4465,
-      "checkedAt": "2026-02-12T21:33:31.585Z"
-    },
-    "2cJ7FyNoqigEGoM7m8p4PY7a33B2SQxV8P7VuUVJZ9y5otyqNS": {
-      "chainName": "Tiltyard",
-      "rpcUrl": "https://subnets.avax.network/tiltyard/mainnet/rpc",
-      "valid": false,
-      "error": "HTTP 405",
-      "checkedAt": "2026-02-12T21:33:31.638Z"
+      "blockNumber": 4469,
+      "checkedAt": "2026-02-12T22:29:14.121Z"
     },
     "24gRTyzFmXUPebVwzQHuwU6RFeKHHDxRftRVaSAe7MHRXWxZ4S": {
       "chainName": "TITANL",
       "rpcUrl": "https://subnets.avax.network/titan/mainnet/rpc",
       "valid": true,
-      "blockNumber": 13835,
-      "checkedAt": "2026-02-12T21:33:31.985Z"
+      "blockNumber": 13839,
+      "checkedAt": "2026-02-12T22:29:14.526Z"
     },
     "Bb5XKrQoBT6ypFmFUppAqfSmKCqcqYwjGCn3hHS6gibRTjiDj": {
       "chainName": "Tixbase",
       "rpcUrl": "https://subnets.avax.network/tixchain/mainnet/rpc",
       "valid": true,
       "blockNumber": 1741,
-      "checkedAt": "2026-02-12T21:33:32.138Z"
-    },
-    "2bDPqb1bsLWxAjJ6WhZA5zNxPaurWHJvQynuzD6CnM8jieAvGS": {
-      "chainName": "TurfNetwork",
-      "rpcUrl": "https://subnets.avax.network/turf/mainnet/rpc",
-      "valid": false,
-      "error": "HTTP 405",
-      "checkedAt": "2026-02-12T21:33:32.192Z"
-    },
-    "2tsFdSeemtqK9vaPgjPrcwvKFKPw1T6PHufaZ26tKbAFSkXPTE": {
-      "chainName": "UPTN",
-      "rpcUrl": "https://node-api.uptn.io/v1/ext/rpc",
-      "valid": false,
-      "error": "No CORS headers",
-      "checkedAt": "2026-02-12T21:33:33.986Z"
+      "checkedAt": "2026-02-12T22:29:14.662Z"
     },
     "uoVf4pQ3KkaNqAz76ZrmYYeGSJJJSuVR4Wv72BCJR8Eyq2iF4": {
       "chainName": "Warp",
       "rpcUrl": "https://subnets.avax.network/warp/mainnet/rpc",
       "valid": true,
       "blockNumber": 4,
-      "checkedAt": "2026-02-12T21:33:34.270Z"
+      "checkedAt": "2026-02-12T22:29:15.047Z"
     },
     "2d64dyhZfegk2hZBt49xGmMRPfqj5mufhW5tR1wX9xPJintuNW": {
       "chainName": "Youmio",
       "rpcUrl": "https://subnets.avax.network/youmio/mainnet/rpc",
       "valid": true,
       "blockNumber": 115050,
-      "checkedAt": "2026-02-12T21:33:34.558Z"
+      "checkedAt": "2026-02-12T22:29:15.333Z"
     },
     "2Xj6iZeySuuUTZR5jYjhQ7yQ84q8AtDWnAJ2vS9BmmXBNJhYD1": {
       "chainName": "zerooneMainnet",
       "rpcUrl": "https://subnets.avax.network/zeroonemai/mainnet/rpc",
       "valid": true,
-      "blockNumber": 490693,
-      "checkedAt": "2026-02-12T21:33:34.869Z"
+      "blockNumber": 490698,
+      "checkedAt": "2026-02-12T22:29:15.628Z"
     }
   }
 }
