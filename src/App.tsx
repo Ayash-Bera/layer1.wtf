@@ -54,78 +54,7 @@ function App() {
   }
 
   const fetchChainData = async (rpcUrl: string, chainName: string, evmChainId: string) => {
-    // Use proxy for UPTN to avoid CORS issues
-    if (rpcUrl.includes('node-api.uptn.io')) {
-      return await fetchChainDataViaProxy(rpcUrl, chainName, evmChainId)
-    }
-    // Use direct RPC URL for other chains
     return await fetchChainDataDirect(rpcUrl, chainName, evmChainId)
-  }
-
-  const fetchChainDataViaProxy = async (rpcUrl: string, chainName: string, evmChainId: string) => {
-    // Try standalone proxy server first (runs on port 3001)
-    try {
-      // In production, use the external API directly; in development, use proxy
-      const rpcProxyBase = import.meta.env.VITE_RPC_PROXY_URL || '/api/rpc'
-      const isProduction = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
-      const apiUrl = isProduction
-        ? `${rpcProxyBase}/${evmChainId}/rpc`
-        : `/api/rpc/${evmChainId}/rpc`
-
-      // Proxy RPC call for ${chainName}
-
-      const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 10000)
-
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify({
-          method: 'eth_getBlockByNumber',
-          params: ['latest', true],
-          id: 1,
-          jsonrpc: '2.0'
-        }),
-        signal: controller.signal
-      })
-
-      clearTimeout(timeoutId)
-
-      if (!response.ok) {
-        // If API fails with 500 and chain config not found, try direct RPC
-        if (response.status === 500) {
-          try {
-            const errorText = await response.text()
-            if (errorText.includes('Chain config not found')) {
-              return await fetchChainDataDirect(rpcUrl, chainName, evmChainId)
-            }
-          } catch (textError) {
-          }
-        }
-        throw new Error(`HTTP ${response.status}: Failed to fetch data for chain ${chainName}`)
-      }
-
-      const data = await response.json()
-      if (data.error) {
-        throw new Error(`RPC Error for ${chainName}: ${data.error.message || 'Unknown RPC error'}`)
-      }
-
-      return data.result
-    } catch (err) {
-      // Proxy failed, trying direct fallback
-    }
-
-    // Final fallback: Try direct request
-    try {
-      return await fetchChainDataDirect(rpcUrl, chainName, evmChainId)
-    } catch (err) {
-      console.warn(`All RPC methods failed for ${chainName}`)
-      throw new Error(`Failed to fetch ${chainName} data: All proxy methods failed.`)
-    }
   }
 
   const fetchChainDataDirect = async (rpcUrl: string, chainName: string, evmChainId: string) => {

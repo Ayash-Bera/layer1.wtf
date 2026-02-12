@@ -1995,29 +1995,6 @@
     ]
   },
   {
-    "chainName": "UPTN",
-    "blockchainId": "2tsFdSeemtqK9vaPgjPrcwvKFKPw1T6PHufaZ26tKbAFSkXPTE",
-    "subnetId": "yDxaSh2hoVxQKRHmacV1xFpuSgHf6Q6cCMu4v3GoLQnqQWk6L",
-    "rpcUrl": "https://node-api.uptn.io/v1/ext/rpc",
-    "evmChainId": "6119",
-    "vmName": "EVM",
-    "isL1": true,
-    "logo": "https://cdn.snowpeer.io/uptn-station.png",
-    "description": "UPTN is a Web3.0 Platform where various real world business and lifestyle services can integrate into. We envision UPTN as a tool to enable mass adoption, a gateway platform into Web3.0, and also support various Web2.0 services that want to migrate to Web3.0.",
-    "explorerUrl": "http://explorer.uptn.io/",
-    "website": "https://www.uptn.io",
-    "nativeToken": {
-      "symbol": "UPTN",
-      "name": "UPTN",
-      "decimals": 18,
-      "logoUri": "https://images.ctfassets.net/gcj8jwzm6086/5jmuPVLmmUSDrfXxbIrWwo/4bdbe8d55b775b613156760205d19f9f/symbol_UPTN_-_js_won.png"
-    },
-    "categories": [
-      "SOCIAL",
-      "LOYALTY"
-    ]
-  },
-  {
     "chainName": "Warp",
     "blockchainId": "uoVf4pQ3KkaNqAz76ZrmYYeGSJJJSuVR4Wv72BCJR8Eyq2iF4",
     "subnetId": "9L3hT5PtJVhiyJt1FHVqeJKtguyTM7V98KZobBeCUhYCQEHeQ",

@@ -8,8 +8,7 @@
     "validate:rpcs": "node scripts/validate-rpcs.cjs",
     "predev": "npm run build:chains",
     "dev": "vite",
-    "dev:proxy": "node proxy-server.js",
-    "prebuild": "npm run build:chains",
+"prebuild": "npm run build:chains",
     "build": "vite build",
     "preview": "vite preview"
   },
