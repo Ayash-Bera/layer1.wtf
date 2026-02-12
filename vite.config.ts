@@ -23,6 +23,12 @@ export default defineConfig({
           });
         },
       },
+      '/api/l1beat': {
+        target: 'https://whale-app-evtjn.ondigitalocean.app',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/l1beat/, '/api'),
+        secure: true,
+      },
       '/api/proxy/uptn': {
         target: 'https://node-api.uptn.io',
         changeOrigin: true,

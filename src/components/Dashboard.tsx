@@ -8,10 +8,12 @@ import { useState } from "react";
 interface DashboardProps {
   chainData: ChainBlockData[];
   loading: boolean;
+  validatorCounts: Record<string, number>;
+  icmCounts: Record<string, number>;
   onRefresh: () => void;
 }
 
-export function Dashboard({ chainData, loading, onRefresh }: DashboardProps) {
+export function Dashboard({ chainData, loading, validatorCounts, icmCounts, onRefresh }: DashboardProps) {
   const [showErrorDialog, setShowErrorDialog] = useState(false);
 
   const handleIcmClick = () => {
@@ -118,6 +120,8 @@ export function Dashboard({ chainData, loading, onRefresh }: DashboardProps) {
         <ChainTable
           chainData={sortedChainData}
           loading={loading}
+          validatorCounts={validatorCounts}
+          icmCounts={icmCounts}
           onRefresh={onRefresh}
         />
 

@@ -231,7 +231,7 @@ body {
 
 .table-header {
   display: grid;
-  grid-template-columns: 160px 100px 70px 90px 80px 90px 140px;
+  grid-template-columns: 2fr 1.2fr 0.8fr 1fr 0.9fr 0.7fr 1fr 1.3fr 0.7fr 1.6fr;
   border-bottom: 1px solid #ff4444;
   font-size: 13px;
 }
@@ -239,7 +239,7 @@ body {
 .header-cell {
   padding: 8px 6px;
   font-weight: normal;
-  text-align: left;
+  text-align: center;
   color: #ff6b6b;
 }
 
@@ -275,7 +275,7 @@ body {
 
 .table-row {
   display: grid;
-  grid-template-columns: 160px 100px 70px 90px 80px 90px 140px;
+  grid-template-columns: 2fr 1.2fr 0.8fr 1fr 0.9fr 0.7fr 1fr 1.3fr 0.7fr 1.6fr;
   font-size: 13px;
 }
 
@@ -366,6 +366,7 @@ body {
 
 .stack-cell {
   white-space: nowrap;
+  padding-right: 12px;
 }
 
 .numeric-cell {
@@ -765,7 +766,7 @@ body {
 
   .table-header,
   .table-row {
-    grid-template-columns: 140px 90px 60px 80px 70px 80px 100px;
+    grid-template-columns: 2fr 1.2fr 0.8fr 1fr 0.9fr 0.7fr 1fr 1.3fr 0.7fr 1.6fr;
     font-size: 11px;
   }
 
@@ -794,7 +795,7 @@ body {
 
   .table-header,
   .table-row {
-    grid-template-columns: 110px 80px 50px 70px 60px 70px 80px;
+    grid-template-columns: 2fr 1.2fr 0.8fr 1fr 0.9fr 0.7fr 1fr 1.3fr 0.7fr 1.6fr;
     font-size: 10px;
   }
 

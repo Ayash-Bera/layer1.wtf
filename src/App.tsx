@@ -10,6 +10,48 @@ function App() {
   const [chainData, setChainData] = useState<ChainBlockData[]>([])
   const [loading, setLoading] = useState(true)
   const [allDataFetched, setAllDataFetched] = useState(false)
+  const [validatorCounts, setValidatorCounts] = useState<Record<string, number>>({})
+  const [icmCounts, setIcmCounts] = useState<Record<string, number>>({})
+
+  const fetchBackendData = async () => {
+    try {
+      const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      const api = isDev ? '/api/l1beat' : import.meta.env.VITE_L1BEAT_API_URL
+      const [validatorRes, icmRes] = await Promise.allSettled([
+        fetch(`${api}/validators/network/stats`).then(r => r.json()),
+        fetch(`${api}/teleporter/messages/daily-count`).then(r => r.json())
+      ])
+
+      if (validatorRes.status === 'fulfilled' && validatorRes.value?.data?.allChains) {
+        const counts: Record<string, number> = {}
+        for (const chain of validatorRes.value.data.allChains) {
+          counts[chain.chainName] = chain.validatorCount
+          if (chain.evmChainId) counts[String(chain.evmChainId)] = chain.validatorCount
+        }
+        setValidatorCounts(counts)
+      }
+
+      if (icmRes.status === 'fulfilled' && icmRes.value?.data) {
+        const counts: Record<string, number> = {}
+        for (const msg of icmRes.value.data) {
+          counts[msg.sourceChain] = (counts[msg.sourceChain] || 0) + msg.messageCount
+          counts[msg.destinationChain] = (counts[msg.destinationChain] || 0) + msg.messageCount
+        }
+        // Keep as daily totals (raw counts are already for the full time window)
+        // Also index by evmChainId using validator chain data for better matching
+        if (validatorRes.status === 'fulfilled' && validatorRes.value?.data?.allChains) {
+          for (const chain of validatorRes.value.data.allChains) {
+            if (chain.evmChainId && counts[chain.chainName] !== undefined) {
+              counts[String(chain.evmChainId)] = counts[chain.chainName]
+            }
+          }
+        }
+        setIcmCounts(counts)
+      }
+    } catch (err) {
+      console.warn('Failed to fetch backend data:', err)
+    }
+  }
 
   const fetchChainData = async (rpcUrl: string, chainName: string, evmChainId: string) => {
     // Use proxy for UPTN to avoid CORS issues
@@ -24,9 +66,10 @@ function App() {
     // Try standalone proxy server first (runs on port 3001)
     try {
       // In production, use the external API directly; in development, use proxy
+      const rpcProxyBase = import.meta.env.VITE_RPC_PROXY_URL || '/api/rpc'
       const isProduction = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
       const apiUrl = isProduction
-        ? `https://idx6.solokhin.com/api/${evmChainId}/rpc`
+        ? `${rpcProxyBase}/${evmChainId}/rpc`
         : `/api/rpc/${evmChainId}/rpc`
 
       console.log(`Attempting proxy RPC call for ${chainName} via ${isProduction ? 'production API' : 'dev proxy'}`)
@@ -291,6 +334,7 @@ function App() {
 
   useEffect(() => {
     fetchAllChainData()
+    fetchBackendData()
 
     // After initial fetch, use update function for subsequent calls
     const interval = setInterval(() => {
@@ -299,7 +343,13 @@ function App() {
       }
     }, 5000)
 
-    return () => clearInterval(interval)
+    // Refresh backend data every 5 minutes
+    const backendInterval = setInterval(fetchBackendData, 300000)
+
+    return () => {
+      clearInterval(interval)
+      clearInterval(backendInterval)
+    }
   }, [allDataFetched])
 
   return (
@@ -308,6 +358,8 @@ function App() {
         <Dashboard
           chainData={chainData}
           loading={loading}
+          validatorCounts={validatorCounts}
+          icmCounts={icmCounts}
           onRefresh={() => {
             if (allDataFetched) {
               updateChainData()
