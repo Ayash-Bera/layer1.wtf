@@ -72,7 +72,7 @@ function App() {
         ? `${rpcProxyBase}/${evmChainId}/rpc`
         : `/api/rpc/${evmChainId}/rpc`
 
-      console.log(`Attempting proxy RPC call for ${chainName} via ${isProduction ? 'production API' : 'dev proxy'}`)
+      // Proxy RPC call for ${chainName}
 
       const controller = new AbortController()
       const timeoutId = setTimeout(() => controller.abort(), 10000)
@@ -101,11 +101,9 @@ function App() {
           try {
             const errorText = await response.text()
             if (errorText.includes('Chain config not found')) {
-              console.log(`API doesn't support chain ${chainName} (${evmChainId}), trying direct RPC...`)
               return await fetchChainDataDirect(rpcUrl, chainName, evmChainId)
             }
           } catch (textError) {
-            console.warn(`Could not read error response for ${chainName}:`, textError)
           }
         }
         throw new Error(`HTTP ${response.status}: Failed to fetch data for chain ${chainName}`)
@@ -116,25 +114,22 @@ function App() {
         throw new Error(`RPC Error for ${chainName}: ${data.error.message || 'Unknown RPC error'}`)
       }
 
-      console.log(`Successfully fetched data for ${chainName} via proxy`)
       return data.result
     } catch (err) {
-      console.warn(`Proxy failed for ${chainName}, trying direct request...`, err)
+      // Proxy failed, trying direct fallback
     }
 
     // Final fallback: Try direct request
     try {
-      console.log(`Attempting direct request for ${chainName} as final fallback`)
       return await fetchChainDataDirect(rpcUrl, chainName, evmChainId)
     } catch (err) {
-      console.error(`All methods failed for ${chainName}:`, err)
+      console.warn(`All RPC methods failed for ${chainName}`)
       throw new Error(`Failed to fetch ${chainName} data: All proxy methods failed.`)
     }
   }
 
   const fetchChainDataDirect = async (rpcUrl: string, chainName: string, evmChainId: string) => {
     try {
-      console.log(`Attempting direct RPC call for ${chainName} to ${rpcUrl}`)
 
       // Create an AbortController for timeout
       const controller = new AbortController()
@@ -168,18 +163,14 @@ function App() {
         throw new Error(`RPC Error for ${chainName}: ${data.error.message || 'Unknown RPC error'}`)
       }
 
-      console.log(`Successfully fetched data for ${chainName} via direct RPC`)
       return data.result
     } catch (err) {
       if (err instanceof Error && err.name === 'AbortError') {
-        console.error(`Timeout fetching data for chain ${chainName} via direct RPC`)
         throw new Error(`Timeout: Failed to fetch data for chain ${chainName} via direct RPC`)
       }
       if (err instanceof TypeError && err.message.includes('Failed to fetch')) {
-        console.error(`CORS or network error for ${chainName}:`, err)
         throw new Error(`CORS/Network error: ${chainName} RPC endpoint may not allow browser requests.`)
       }
-      console.error(`Error fetching data for chain ${chainName} via direct RPC:`, err)
       throw err
     }
   }
