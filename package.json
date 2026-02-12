@@ -6,9 +6,9 @@
   "scripts": {
     "build:chains": "node scripts/build-chains.cjs",
     "validate:rpcs": "node scripts/validate-rpcs.cjs",
-    "predev": "npm run build:chains",
+    "predev": "npm run build:chains && npm run validate:rpcs && npm run build:chains",
     "dev": "vite",
-"prebuild": "npm run build:chains",
+"prebuild": "npm run build:chains && npm run validate:rpcs && npm run build:chains",
     "build": "vite build",
     "preview": "vite preview"
   },

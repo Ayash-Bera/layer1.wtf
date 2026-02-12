@@ -255,7 +255,7 @@
     "chainName": "BnryMainnet",
     "blockchainId": "J3MYb3rDARLmB7FrRybinyjKqVTqmerbCr9bAXDatrSaHiLxQ",
     "subnetId": "23dqTMHK186m4Rzcn1ukJdmHy13nqido4LjTp5Kh9W6qBKaFib",
-    "rpcUrl": "https://rpc-binary-mainnet.cogitus.io/ext/bc/J3MYb3rDARLmB7FrRybinyjKqVTqmerbCr9bAXDatrSaHiLxQ/rpc",
+    "rpcUrl": null,
     "evmChainId": "836",
     "vmName": "EVM",
     "isL1": true,
@@ -288,6 +288,25 @@
     "categories": []
   },
   {
+    "chainName": "cloudverse",
+    "blockchainId": "21wWGaE2vXSeJqfYwyiMukJuP866jFfKNYkCLXmhx9SZakh11G",
+    "subnetId": "4YtJVNm6KnytRaEDeezC3mHK5FnsP75Sjgxa5eiav3sxNUQD9",
+    "rpcUrl": null,
+    "evmChainId": "33210",
+    "vmName": "EVM",
+    "isL1": false,
+    "logo": "https://cdn.snowpeer.io/cloudverse.png",
+    "description": "Cloudverse is an enterprise-level metaverse platform powered by Alibaba Cloud and the Avalanche ecosystem, managed by MUA DAO. It provides a robust metaverse solution for businesses, supported by a skilled team in crypto, architecture, asset management, and game development, ensuring continuous expansion and compatibility with various devices.",
+    "explorerUrl": null,
+    "website": "https://muadao.build",
+    "nativeToken": {
+      "logoUri": ""
+    },
+    "categories": [
+      "METAVERSE"
+    ]
+  },
+  {
     "chainName": "CodeNekt",
     "blockchainId": "ZG7cT4B1u3y7piZ9CzfejnTKnNAoehcifbJWUwBqgyD3RuEqK",
     "subnetId": "o4Eariv2Cx1fTvPFXYofpJfS9KgwFaiGN8KFGcCeZM9t87GJr",
@@ -304,6 +323,28 @@
     },
     "categories": [
       "DEPIN"
+    ]
+  },
+  {
+    "chainName": "Coqnet",
+    "blockchainId": "23aQU1537YseCJmXW11XHjPra6bptBSps5D4xXupt8hN2QUeaG",
+    "subnetId": "5moznRzaAEhzWkNTQVdT1U4Kb9EU7dbsKZQNmHwtN5MGVQRyT",
+    "rpcUrl": null,
+    "evmChainId": "42069",
+    "vmName": "EVM",
+    "isL1": true,
+    "logo": "https://cdn.snowpeer.io/coqnet.svg",
+    "description": "Coqnet is a Layer-1 blockchain within the Avalanche ecosystem, designed to empower memecoin communities. It combines Avalanche's robust infrastructure with a unique identity and features tailored to support vibrant communities, innovative developers, and dedicated validators.",
+    "explorerUrl": "https://subnets.avax.network/coqnet",
+    "website": "https://coqnet.io",
+    "nativeToken": {
+      "symbol": "COQ",
+      "name": "COQINU",
+      "decimals": 18,
+      "logoUri": "https://images.ctfassets.net/gcj8jwzm6086/1r0LuDAKrZv9jgKqaeEBN3/9a7efac3099b861366f9e776e6131617/Isotipo_coq.png"
+    },
+    "categories": [
+      "GAMING"
     ]
   },
   {
@@ -530,6 +571,26 @@
       "FINANCE",
       "DEX"
     ]
+  },
+  {
+    "chainName": "EthixEtx",
+    "blockchainId": "2R87vuaaRZRxPLdvdMEpo7fH9qyyNnP34h4nyxuwq8sKkQ1GaE",
+    "subnetId": "q54cgHa9RN2NFp9qsfpPzVkhgn8xqDgKEQR1G997xZ1P5Dc8o",
+    "rpcUrl": null,
+    "evmChainId": "389",
+    "vmName": "EVM",
+    "isL1": true,
+    "logo": null,
+    "description": null,
+    "explorerUrl": "https://subnets.avax.network/etx",
+    "website": null,
+    "nativeToken": {
+      "symbol": "ETX",
+      "name": "ETX",
+      "decimals": 18,
+      "logoUri": ""
+    },
+    "categories": []
   },
   {
     "chainName": "ETO Mainnet",
@@ -1538,6 +1599,26 @@
     "categories": []
   },
   {
+    "chainName": "QRTMS",
+    "blockchainId": "28Z2DcNiiV6dD5LAm1KNZGBmpbokWaHVBaTXV9HoUCh7o1ahEc",
+    "subnetId": "TsijYHafTXCUZGoisGnMorh2HGwY9Vg2YzviEo8nrmtZZESp9",
+    "rpcUrl": null,
+    "evmChainId": "77757",
+    "vmName": "EVM",
+    "isL1": true,
+    "logo": null,
+    "description": null,
+    "explorerUrl": "https://subnets.avax.network/qr0723t1ms",
+    "website": null,
+    "nativeToken": {
+      "symbol": "DIEGO",
+      "name": "DIEGO",
+      "decimals": 18,
+      "logoUri": ""
+    },
+    "categories": []
+  },
+  {
     "chainName": "REALLY",
     "blockchainId": "2gPHVXPoDvbt6MFUrGBYV5mApC9Y1Xckhdpr31cHzjcJyTAgrZ",
     "subnetId": "nzn8Jhci2yYVnKSTzEjADD5UUx9pEa3kPizEoyrv14e6iaZ7f",
@@ -1976,6 +2057,28 @@
     ]
   },
   {
+    "chainName": "TurfNetwork",
+    "blockchainId": "2bDPqb1bsLWxAjJ6WhZA5zNxPaurWHJvQynuzD6CnM8jieAvGS",
+    "subnetId": "7e3ziXMNuq29Y6nBBvWQZYAWYKyvhN5bhvmoNquNEbvFR51ad",
+    "rpcUrl": null,
+    "evmChainId": "62334",
+    "vmName": "EVM",
+    "isL1": true,
+    "logo": "https://images.ctfassets.net/gcj8jwzm6086/2OGwSmo36iWhvmPfgUUnEb/0812275eac56a8d82907fb96d96002bc/with_green_background.png",
+    "description": "TURF is an intent-driven data orchestration protocol that powers on-demand access to structured, high-context data. The network autonomously & intelligently route requests to relevant sources—bringing real-time, semantically aligned data to the agents and models that request for Data.",
+    "explorerUrl": "https://explorer.avax.network/turf",
+    "website": "https://turf.network",
+    "nativeToken": {
+      "symbol": "TURF",
+      "name": "TURF",
+      "decimals": 18,
+      "logoUri": "https://images.ctfassets.net/gcj8jwzm6086/2OGwSmo36iWhvmPfgUUnEb/0812275eac56a8d82907fb96d96002bc/with_green_background.png"
+    },
+    "categories": [
+      "DATA"
+    ]
+  },
+  {
     "chainName": "ULALO",
     "blockchainId": "2uN4Y9JHkLeAJK85Y48LExpNnEiepf7VoZAtmjnwDSZzpZcNig",
     "subnetId": "sopy3uXvCFVLorg4kmqQfZpqVg9GXzs8GmjSwM18GZJtf66h6",
@@ -1992,6 +2095,29 @@
     },
     "categories": [
       "HEALTH"
+    ]
+  },
+  {
+    "chainName": "UPTN",
+    "blockchainId": "2tsFdSeemtqK9vaPgjPrcwvKFKPw1T6PHufaZ26tKbAFSkXPTE",
+    "subnetId": "yDxaSh2hoVxQKRHmacV1xFpuSgHf6Q6cCMu4v3GoLQnqQWk6L",
+    "rpcUrl": null,
+    "evmChainId": "6119",
+    "vmName": "EVM",
+    "isL1": true,
+    "logo": "https://cdn.snowpeer.io/uptn-station.png",
+    "description": "UPTN is a Web3.0 Platform where various real world business and lifestyle services can integrate into. We envision UPTN as a tool to enable mass adoption, a gateway platform into Web3.0, and also support various Web2.0 services that want to migrate to Web3.0.",
+    "explorerUrl": "http://explorer.uptn.io/",
+    "website": "https://www.uptn.io",
+    "nativeToken": {
+      "symbol": "UPTN",
+      "name": "UPTN",
+      "decimals": 18,
+      "logoUri": "https://images.ctfassets.net/gcj8jwzm6086/5jmuPVLmmUSDrfXxbIrWwo/4bdbe8d55b775b613156760205d19f9f/symbol_UPTN_-_js_won.png"
+    },
+    "categories": [
+      "SOCIAL",
+      "LOYALTY"
     ]
   },
   {
