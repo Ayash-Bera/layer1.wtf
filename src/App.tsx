@@ -6,8 +6,6 @@ import { getActiveChains } from './data/chains'
 import CRTEffect from 'vault66-crt-effect'
 import 'vault66-crt-effect/dist/vault66-crt-effect.css'
 
-const L1BEAT_API = import.meta.env.VITE_L1BEAT_API_URL || '/api/l1beat'
-
 function App() {
   const [chainData, setChainData] = useState<ChainBlockData[]>([])
   const [loading, setLoading] = useState(true)
@@ -17,9 +15,11 @@ function App() {
 
   const fetchBackendData = async () => {
     try {
+      const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      const api = isDev ? '/api/l1beat' : import.meta.env.VITE_L1BEAT_API_URL
       const [validatorRes, icmRes] = await Promise.allSettled([
-        fetch(`${L1BEAT_API}/validators/network/stats`).then(r => r.json()),
-        fetch(`${L1BEAT_API}/teleporter/messages/daily-count`).then(r => r.json())
+        fetch(`${api}/validators/network/stats`).then(r => r.json()),
+        fetch(`${api}/teleporter/messages/daily-count`).then(r => r.json())
       ])
 
       if (validatorRes.status === 'fulfilled' && validatorRes.value?.data?.allChains) {
@@ -33,15 +33,11 @@ function App() {
 
       if (icmRes.status === 'fulfilled' && icmRes.value?.data) {
         const counts: Record<string, number> = {}
-        const timeWindow = icmRes.value.metadata?.timeWindow || 24
         for (const msg of icmRes.value.data) {
           counts[msg.sourceChain] = (counts[msg.sourceChain] || 0) + msg.messageCount
           counts[msg.destinationChain] = (counts[msg.destinationChain] || 0) + msg.messageCount
         }
-        // Convert to per-hour rate
-        for (const key of Object.keys(counts)) {
-          counts[key] = counts[key] / timeWindow
-        }
+        // Keep as daily totals (raw counts are already for the full time window)
         // Also index by evmChainId using validator chain data for better matching
         if (validatorRes.status === 'fulfilled' && validatorRes.value?.data?.allChains) {
           for (const chain of validatorRes.value.data.allChains) {

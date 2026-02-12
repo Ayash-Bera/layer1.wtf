@@ -231,7 +231,7 @@ body {
 
 .table-header {
   display: grid;
-  grid-template-columns: 2fr 1.2fr 0.7fr 0.7fr 1fr 0.8fr 1fr 0.9fr 1.3fr 1.6fr;
+  grid-template-columns: 2fr 1.2fr 0.8fr 1fr 0.9fr 0.7fr 1fr 1.3fr 0.7fr 1.6fr;
   border-bottom: 1px solid #ff4444;
   font-size: 13px;
 }
@@ -275,7 +275,7 @@ body {
 
 .table-row {
   display: grid;
-  grid-template-columns: 2fr 1.2fr 0.7fr 0.7fr 1fr 0.8fr 1fr 0.9fr 1.3fr 1.6fr;
+  grid-template-columns: 2fr 1.2fr 0.8fr 1fr 0.9fr 0.7fr 1fr 1.3fr 0.7fr 1.6fr;
   font-size: 13px;
 }
 
@@ -766,7 +766,7 @@ body {
 
   .table-header,
   .table-row {
-    grid-template-columns: 2fr 1.2fr 0.7fr 0.7fr 1fr 0.8fr 1fr 0.9fr 1.3fr 1.6fr;
+    grid-template-columns: 2fr 1.2fr 0.8fr 1fr 0.9fr 0.7fr 1fr 1.3fr 0.7fr 1.6fr;
     font-size: 11px;
   }
 
@@ -795,7 +795,7 @@ body {
 
   .table-header,
   .table-row {
-    grid-template-columns: 2fr 1.2fr 0.7fr 0.7fr 1fr 0.8fr 1fr 0.9fr 1.3fr 1.6fr;
+    grid-template-columns: 2fr 1.2fr 0.8fr 1fr 0.9fr 0.7fr 1fr 1.3fr 0.7fr 1.6fr;
     font-size: 10px;
   }
 
