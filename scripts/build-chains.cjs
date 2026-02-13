@@ -65,12 +65,14 @@ function parseRegistryChain(registryData, folderName) {
   return chains;
 }
 
+const skipRpcFilter = process.argv.includes('--no-filter');
+
 function buildChains() {
   console.log('Building chains from l1beat-l1-registry...');
   console.log(`Registry path: ${REGISTRY_PATH}`);
 
   // Load RPC validation status
-  const rpcStatus = loadRpcStatus();
+  const rpcStatus = skipRpcFilter ? null : loadRpcStatus();
 
   if (!fs.existsSync(REGISTRY_PATH)) {
     throw new Error(`Registry path not found: ${REGISTRY_PATH}`);

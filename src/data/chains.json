@@ -255,7 +255,7 @@
     "chainName": "BnryMainnet",
     "blockchainId": "J3MYb3rDARLmB7FrRybinyjKqVTqmerbCr9bAXDatrSaHiLxQ",
     "subnetId": "23dqTMHK186m4Rzcn1ukJdmHy13nqido4LjTp5Kh9W6qBKaFib",
-    "rpcUrl": null,
+    "rpcUrl": "https://rpc-binary-mainnet.cogitus.io/ext/bc/J3MYb3rDARLmB7FrRybinyjKqVTqmerbCr9bAXDatrSaHiLxQ/rpc",
     "evmChainId": "836",
     "vmName": "EVM",
     "isL1": true,

@@ -6,15 +6,16 @@
   "scripts": {
     "build:chains": "node scripts/build-chains.cjs",
     "validate:rpcs": "node scripts/validate-rpcs.cjs",
-    "predev": "npm run build:chains && npm run validate:rpcs && npm run build:chains",
+    "build:chains:unfiltered": "node scripts/build-chains.cjs --no-filter",
+    "predev": "npm run build:chains:unfiltered && npm run validate:rpcs && npm run build:chains",
     "dev": "vite",
-"prebuild": "npm run build:chains && npm run validate:rpcs && npm run build:chains",
+    "prebuild": "npm run build:chains:unfiltered && npm run validate:rpcs && npm run build:chains",
     "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
     "@tippyjs/react": "^4.2.6",
-    "l1beat-l1-registry": "^1.2.3",
+    "l1beat-l1-registry": "^1.2.5",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "sparklines": "^1.3.0",
