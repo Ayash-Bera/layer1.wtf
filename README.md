@@ -1,14 +1,21 @@
-# Layer1.wtf
+<p align="center">
+  <img src="public/logo-full.png" alt="Layer1.wtf" height="80">
+</p>
 
-Real-time dashboard for monitoring Avalanche L1 chains. Tracks TPS, Mgas/s, KB/s, block numbers, and more — fetched directly from RPC endpoints.
+<p align="center">
+  Real-time dashboard for monitoring Avalanche L1 chains.<br>
+  Tracks TPS, Mgas/s, KB/s, block numbers, and more, fetched directly from RPC endpoints.
+</p>
+
+---
 
 ## Features
 
-- **Live Metrics** — Aggregate TPS, Mgas/s, and KB/s across all active chains, updated every 5 seconds
-- **Chain Table** — Per-chain block number, TPS, gas usage, data throughput, validators, ICM messages, and TPS sparklines
-- **Chain Details** — Hover or click any chain to see blockchain ID, subnet ID, RPC URL, explorer link, and website
-- **Filtering** — Filter by stack type (Primary Network, Avalanche-L1, Legacy Subnet) and by category (DeFi, Gaming, Health, Infra, etc.)
-- **CRT Aesthetic** — Retro terminal look with animated counters and a CRT monitor effect
+- **Live Metrics** -Aggregate TPS, Mgas/s, and KB/s across all active chains, updated every 5 seconds
+- **Chain Table** -Per-chain block number, TPS, gas usage, data throughput, validators, ICM messages, and TPS sparklines
+- **Chain Details** -Hover or click any chain to see blockchain ID, subnet ID, RPC URL, explorer link, and website
+- **Filtering** -Filter by stack type (Primary Network, Avalanche-L1, Legacy Subnet) and by category (DeFi, Gaming, Health, Infra, etc.)
+- **CRT Aesthetic** -Retro terminal look with animated counters and a CRT monitor effect
 
 ## Quick Start
 
@@ -66,13 +73,13 @@ src/
 
 ### Metrics
 
-All calculations assume a **2-second block time**:
+Rate metrics use **dynamic block time** computed from consecutive block timestamps, falling back to 2 seconds on the first poll or when blocks are skipped:
 
-- **TPS** = transactions per block / 2
-- **Mgas/s** = gas used / 1,000,000 / 2
-- **KB/s** = block size / 1,024 / 2
+- **TPS** = transactions per block / blockTime
+- **Mgas/s** = gas used / 1,000,000 / blockTime
+- **KB/s** = block size / 1,024 / blockTime
 
-Chains with blocks older than 1 hour are excluded from aggregate totals.
+Chains with blocks older than 60 seconds show zero for rate metrics and sort below active chains.
 
 ## Adding a Chain
 

@@ -86,7 +86,7 @@ export function Dashboard({ chainData, loading, validatorCounts, icmCounts, onRe
             if (chain.blockData && !chain.loading && !chain.error) {
               const blockTimestamp = parseHexSafe(chain.blockData.timestamp);
               if (blockTimestamp > oneHourAgo) {
-                return sum + calculateTps(chain.blockData.transactions.length);
+                return sum + calculateTps(chain.blockData.transactions.length, chain.blockTime || BLOCK_TIME_SECONDS);
               }
             }
             return sum;
@@ -97,7 +97,7 @@ export function Dashboard({ chainData, loading, validatorCounts, icmCounts, onRe
               const blockTimestamp = parseHexSafe(chain.blockData.timestamp);
               if (blockTimestamp > oneHourAgo) {
                 const gasUsed = parseHexSafe(chain.blockData.gasUsed);
-                return sum + gasUsed / BLOCK_TIME_SECONDS;
+                return sum + gasUsed / (chain.blockTime || BLOCK_TIME_SECONDS);
               }
             }
             return sum;

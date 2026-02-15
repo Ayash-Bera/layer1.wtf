@@ -14,13 +14,13 @@ function makeChain(name: string, overrides: Partial<ChainBlockData> = {}): Chain
   }
 }
 
-function makeBlockData(number: string, gasUsed: string) {
+function makeBlockData(number: string, gasUsed: string, timestamp?: string) {
   return {
     number,
     gasUsed,
     gasLimit: '0xf4240',
     size: '0x400',
-    timestamp: '0x65b0c800',
+    timestamp: timestamp || ('0x' + Math.floor(Date.now() / 1000).toString(16)),
     hash: '0xabc',
     baseFeePerGas: '0x0',
     blobGasUsed: '0x0',

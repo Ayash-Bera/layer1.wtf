@@ -1,4 +1,5 @@
 import { ChainBlockData } from '../types'
+import { STALENESS_THRESHOLD_SECONDS } from '../constants'
 import { parseHexSafe } from './validation'
 
 export function sortChainsByBlockNumber(chains: ChainBlockData[]): ChainBlockData[] {
@@ -20,13 +21,18 @@ export function sortChainsByBlockNumber(chains: ChainBlockData[]): ChainBlockDat
 }
 
 export function sortChainsByGasUsed(chains: ChainBlockData[]): ChainBlockData[] {
-  return [...chains].sort((a, b) => {
-    if (a.blockData && !b.blockData) return -1
-    if (!a.blockData && b.blockData) return 1
+  const nowSeconds = Math.floor(Date.now() / 1000)
 
-    if (a.blockData && b.blockData) {
-      const gasUsedA = parseHexSafe(a.blockData.gasUsed)
-      const gasUsedB = parseHexSafe(b.blockData.gasUsed)
+  return [...chains].sort((a, b) => {
+    const aFresh = a.blockData && nowSeconds - parseHexSafe(a.blockData.timestamp) <= STALENESS_THRESHOLD_SECONDS
+    const bFresh = b.blockData && nowSeconds - parseHexSafe(b.blockData.timestamp) <= STALENESS_THRESHOLD_SECONDS
+
+    if (aFresh && !bFresh) return -1
+    if (!aFresh && bFresh) return 1
+
+    if (aFresh && bFresh) {
+      const gasUsedA = parseHexSafe(a.blockData!.gasUsed)
+      const gasUsedB = parseHexSafe(b.blockData!.gasUsed)
       return gasUsedB - gasUsedA
     }
 

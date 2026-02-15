@@ -2,7 +2,7 @@ import React from 'react'
 import { Tooltip } from './Tooltip'
 import { AnimatedCounter } from './AnimatedCounter'
 import { ChainBlockData } from '../types'
-import { BLOCK_TIME_SECONDS } from '../constants'
+import { BLOCK_TIME_SECONDS, STALENESS_THRESHOLD_SECONDS } from '../constants'
 import { calculateTps } from '../utils/metrics'
 import { parseHexSafe } from '../utils/validation'
 
@@ -22,11 +22,15 @@ export function MetricsPanel({ metrics, loading, chainData }: MetricsPanelProps)
     chain.chainName === 'C-Chain' || chain.chainName === 'Avalanche C-Chain'
   )
 
+  const nowSeconds = Math.floor(Date.now() / 1000)
+
   // Calculate total KB/s
   const totalKbPerSecond = chainData.reduce((sum, chain) => {
     if (chain.blockData && !chain.loading && !chain.error) {
+      const blockTimestamp = parseHexSafe(chain.blockData.timestamp)
+      if (nowSeconds - blockTimestamp > STALENESS_THRESHOLD_SECONDS) return sum
       const blockSize = parseHexSafe(chain.blockData.size)
-      return sum + (blockSize / 1024) / BLOCK_TIME_SECONDS
+      return sum + (blockSize / 1024) / (chain.blockTime || BLOCK_TIME_SECONDS)
     }
     return sum
   }, 0)
@@ -34,8 +38,12 @@ export function MetricsPanel({ metrics, loading, chainData }: MetricsPanelProps)
   // Calculate C-Chain KB/s for comparison
   let cChainKbPerSecond = 0
   if (cChainData?.blockData && !cChainData.loading && !cChainData.error) {
-    const cChainBlockSize = parseHexSafe(cChainData.blockData.size)
-    cChainKbPerSecond = (cChainBlockSize / 1024) / BLOCK_TIME_SECONDS
+    const cChainTimestamp = parseHexSafe(cChainData.blockData.timestamp)
+    if (nowSeconds - cChainTimestamp <= STALENESS_THRESHOLD_SECONDS) {
+      const cChainBlockSize = parseHexSafe(cChainData.blockData.size)
+      const cChainBlockTime = cChainData.blockTime || BLOCK_TIME_SECONDS
+      cChainKbPerSecond = (cChainBlockSize / 1024) / cChainBlockTime
+    }
   }
 
   // Calculate multipliers compared to C-Chain
@@ -48,10 +56,12 @@ export function MetricsPanel({ metrics, loading, chainData }: MetricsPanelProps)
   let gasMultiplier = 0
   let kbMultiplier = 0
 
-  if (metrics && cChainData?.blockData && !cChainData.loading && !cChainData.error) {
-    const cChainTps = calculateTps(cChainData.blockData.transactions.length)
+  if (metrics && cChainData?.blockData && !cChainData.loading && !cChainData.error &&
+      nowSeconds - parseHexSafe(cChainData.blockData.timestamp) <= STALENESS_THRESHOLD_SECONDS) {
+    const cChainBt = cChainData.blockTime || BLOCK_TIME_SECONDS
+    const cChainTps = calculateTps(cChainData.blockData.transactions.length, cChainBt)
     const cChainGasUsed = parseHexSafe(cChainData.blockData.gasUsed)
-    const cChainGasPerSecond = cChainGasUsed / BLOCK_TIME_SECONDS / 1000000
+    const cChainGasPerSecond = cChainGasUsed / cChainBt / 1000000
 
     tpsMultiplier = calculateMultiplier(metrics.totalTps, cChainTps)
     gasMultiplier = calculateMultiplier(metrics.totalGasPerSecond / 1000000, cChainGasPerSecond)

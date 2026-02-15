@@ -3,9 +3,11 @@ import { useState, useEffect } from 'react'
 import { Dashboard } from './components/Dashboard'
 import { ChainBlockData } from './types'
 import { getActiveChains } from './data/chains'
-import { RPC_FETCH_TIMEOUT_MS, POLLING_INTERVAL_MS, BACKEND_REFRESH_INTERVAL_MS, TPS_HISTORY_MAX_LENGTH } from './constants'
+import { RPC_FETCH_TIMEOUT_MS, POLLING_INTERVAL_MS, BACKEND_REFRESH_INTERVAL_MS, TPS_HISTORY_MAX_LENGTH, BLOCK_TIME_SECONDS } from './constants'
 import { sortChainsByBlockNumber } from './utils/sorting'
-import { isValidBlockData } from './utils/validation'
+import { isValidBlockData, parseHexSafe } from './utils/validation'
+
+const MAX_REASONABLE_BLOCK_TIME = 60
 import { calculateTps } from './utils/metrics'
 import CRTEffect from 'vault66-crt-effect'
 import 'vault66-crt-effect/dist/vault66-crt-effect.css'
@@ -141,13 +143,16 @@ function App() {
         if (chainIndex !== -1) {
           const tps = calculateTps(blockData.transactions.length)
           const existingHistory = workingChainData[chainIndex].tpsHistory || []
+          const currentTimestamp = parseHexSafe(blockData.timestamp)
           workingChainData[chainIndex] = {
             ...workingChainData[chainIndex],
             blockData,
             loading: false,
             error: null,
             lastUpdated: Date.now(),
-            tpsHistory: [...existingHistory.slice(-(TPS_HISTORY_MAX_LENGTH - 1)), tps]
+            tpsHistory: [...existingHistory.slice(-(TPS_HISTORY_MAX_LENGTH - 1)), tps],
+            previousBlockTimestamp: currentTimestamp,
+            blockTime: BLOCK_TIME_SECONDS
           }
         }
       } catch (err) {
@@ -207,15 +212,30 @@ function App() {
         const chainIndex = tempChainData.findIndex(item => item.blockchainId === evmChainId)
         if (chainIndex !== -1) {
           if (update.blockData) {
-            const tps = calculateTps(update.blockData.transactions.length)
-            const existingHistory = tempChainData[chainIndex].tpsHistory || []
+            const existing = tempChainData[chainIndex]
+            const newTimestamp = parseHexSafe(update.blockData.timestamp)
+            const newBlockNumber = parseHexSafe(update.blockData.number)
+            const oldBlockNumber = existing.blockData ? parseHexSafe(existing.blockData.number) : 0
+
+            let computedBlockTime = existing.blockTime || BLOCK_TIME_SECONDS
+            if (newBlockNumber === oldBlockNumber + 1 && existing.previousBlockTimestamp) {
+              const delta = newTimestamp - existing.previousBlockTimestamp
+              if (delta > 0 && delta <= MAX_REASONABLE_BLOCK_TIME) {
+                computedBlockTime = delta
+              }
+            }
+
+            const tps = calculateTps(update.blockData.transactions.length, computedBlockTime)
+            const existingHistory = existing.tpsHistory || []
             tempChainData[chainIndex] = {
-              ...tempChainData[chainIndex],
+              ...existing,
               blockData: update.blockData,
               loading: false,
               error: null,
               lastUpdated: Date.now(),
-              tpsHistory: [...existingHistory.slice(-(TPS_HISTORY_MAX_LENGTH - 1)), tps]
+              tpsHistory: [...existingHistory.slice(-(TPS_HISTORY_MAX_LENGTH - 1)), tps],
+              previousBlockTimestamp: newTimestamp,
+              blockTime: computedBlockTime
             }
           } else if (update.error) {
             tempChainData[chainIndex] = {

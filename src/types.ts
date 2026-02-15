@@ -67,4 +67,6 @@ export interface ChainBlockData {
   error: string | null
   lastUpdated: number
   tpsHistory?: number[]
+  previousBlockTimestamp?: number
+  blockTime?: number
 }

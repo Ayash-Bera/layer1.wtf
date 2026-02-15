@@ -3,7 +3,7 @@ import { ChainBlockData } from '../types'
 import { AnimatedCounter } from './AnimatedCounter'
 import { ChainDetailPopup } from './ChainDetailPopup'
 import { chains, Chain } from '../data/chains'
-import { BLOCK_TIME_SECONDS } from '../constants'
+import { BLOCK_TIME_SECONDS, STALENESS_THRESHOLD_SECONDS } from '../constants'
 import { calculateTps } from '../utils/metrics'
 import { parseHexSafe } from '../utils/validation'
 import Sparkline from 'sparklines'
@@ -213,11 +213,15 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, v
     )
   }
 
+  const nowSeconds = Math.floor(Date.now() / 1000)
+
   let highestTpsId = ''
   let highestTps = 0
   chainData.forEach(chain => {
     if (chain.blockData && !chain.loading && !chain.error) {
-      const tps = calculateTps(chain.blockData.transactions.length)
+      const blockTimestamp = parseHexSafe(chain.blockData.timestamp)
+      if (nowSeconds - blockTimestamp > STALENESS_THRESHOLD_SECONDS) return
+      const tps = calculateTps(chain.blockData.transactions.length, chain.blockTime || BLOCK_TIME_SECONDS)
       if (tps > highestTps) {
         highestTps = tps
         highestTpsId = chain.blockchainId
@@ -308,11 +312,14 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, v
         }
 
         const blockNumber = parseHexSafe(chain.blockData.number)
+        const blockTimestamp = parseHexSafe(chain.blockData.timestamp)
+        const isStale = nowSeconds - blockTimestamp > STALENESS_THRESHOLD_SECONDS
         const gasUsed = parseHexSafe(chain.blockData.gasUsed)
         const blockSize = parseHexSafe(chain.blockData.size)
-        const tps = calculateTps(chain.blockData.transactions.length)
-        const mgasPerSecond = (gasUsed / 1000000) / BLOCK_TIME_SECONDS
-        const kbPerSecond = (blockSize / 1024) / BLOCK_TIME_SECONDS
+        const chainBlockTime = chain.blockTime || BLOCK_TIME_SECONDS
+        const tps = isStale ? 0 : calculateTps(chain.blockData.transactions.length, chainBlockTime)
+        const mgasPerSecond = isStale ? 0 : (gasUsed / 1000000) / chainBlockTime
+        const kbPerSecond = isStale ? 0 : (blockSize / 1024) / chainBlockTime
 
         return (
           <ChainRow

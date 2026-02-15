@@ -3,10 +3,16 @@ import { calculateMetrics, calculateTps } from '../metrics'
 import { BlockData } from '../../types'
 
 describe('calculateTps', () => {
-  it('divides transaction count by block time', () => {
+  it('divides transaction count by default block time (2s)', () => {
     expect(calculateTps(10)).toBe(5)
     expect(calculateTps(0)).toBe(0)
     expect(calculateTps(1)).toBe(0.5)
+  })
+
+  it('uses custom blockTime when provided', () => {
+    expect(calculateTps(10, 5)).toBe(2)    // 10 txs / 5s
+    expect(calculateTps(10, 1)).toBe(10)   // 10 txs / 1s
+    expect(calculateTps(6, 3)).toBe(2)     // 6 txs / 3s
   })
 })
 
@@ -68,5 +74,15 @@ describe('calculateMetrics', () => {
   it('counts transactions', () => {
     const metrics = calculateMetrics(mockBlockData)
     expect(metrics.transactionCount).toBe(4)
+  })
+
+  it('uses custom blockTime for TPS calculation', () => {
+    const metrics = calculateMetrics(mockBlockData, 4)
+    expect(metrics.tps).toBe(1) // 4 txs / 4s
+  })
+
+  it('uses default blockTime when not provided', () => {
+    const metrics = calculateMetrics(mockBlockData)
+    expect(metrics.tps).toBe(2) // 4 txs / 2s (default)
   })
 })
