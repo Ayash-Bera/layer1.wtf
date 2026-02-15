@@ -2,6 +2,9 @@ import React from 'react'
 import { Tooltip } from './Tooltip'
 import { AnimatedCounter } from './AnimatedCounter'
 import { ChainBlockData } from '../types'
+import { BLOCK_TIME_SECONDS } from '../constants'
+import { calculateTps } from '../utils/metrics'
+import { parseHexSafe } from '../utils/validation'
 
 interface MetricsPanelProps {
   metrics: {
@@ -22,8 +25,8 @@ export function MetricsPanel({ metrics, loading, chainData }: MetricsPanelProps)
   // Calculate total KB/s
   const totalKbPerSecond = chainData.reduce((sum, chain) => {
     if (chain.blockData && !chain.loading && !chain.error) {
-      const blockSize = parseInt(chain.blockData.size, 16)
-      return sum + (blockSize / 1024) / 2 // KB per second assuming 2s blocks
+      const blockSize = parseHexSafe(chain.blockData.size)
+      return sum + (blockSize / 1024) / BLOCK_TIME_SECONDS
     }
     return sum
   }, 0)
@@ -31,8 +34,8 @@ export function MetricsPanel({ metrics, loading, chainData }: MetricsPanelProps)
   // Calculate C-Chain KB/s for comparison
   let cChainKbPerSecond = 0
   if (cChainData?.blockData && !cChainData.loading && !cChainData.error) {
-    const cChainBlockSize = parseInt(cChainData.blockData.size, 16)
-    cChainKbPerSecond = (cChainBlockSize / 1024) / 2
+    const cChainBlockSize = parseHexSafe(cChainData.blockData.size)
+    cChainKbPerSecond = (cChainBlockSize / 1024) / BLOCK_TIME_SECONDS
   }
 
   // Calculate multipliers compared to C-Chain
@@ -46,9 +49,9 @@ export function MetricsPanel({ metrics, loading, chainData }: MetricsPanelProps)
   let kbMultiplier = 0
 
   if (metrics && cChainData?.blockData && !cChainData.loading && !cChainData.error) {
-    const cChainTps = cChainData.blockData.transactions.length / 2
-    const cChainGasUsed = parseInt(cChainData.blockData.gasUsed, 16)
-    const cChainGasPerSecond = cChainGasUsed / 2 / 1000000
+    const cChainTps = calculateTps(cChainData.blockData.transactions.length)
+    const cChainGasUsed = parseHexSafe(cChainData.blockData.gasUsed)
+    const cChainGasPerSecond = cChainGasUsed / BLOCK_TIME_SECONDS / 1000000
 
     tpsMultiplier = calculateMultiplier(metrics.totalTps, cChainTps)
     gasMultiplier = calculateMultiplier(metrics.totalGasPerSecond / 1000000, cChainGasPerSecond)

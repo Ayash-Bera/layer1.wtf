@@ -5,6 +5,10 @@ import { ChainTable } from "./ChainTable";
 import { ErrorDialog } from "./ErrorDialog";
 import { useState } from "react";
 import { chains } from "../data/chains";
+import { STALENESS_THRESHOLD_SECONDS, BLOCK_TIME_SECONDS } from "../constants";
+import { sortChainsByGasUsed } from "../utils/sorting";
+import { calculateTps } from "../utils/metrics";
+import { parseHexSafe } from "../utils/validation";
 
 const INFRASTRUCTURE_CATEGORIES = new Set(["L0", "L1", "EVM"]);
 const STACK_OPTIONS = ["primary", "avalanche-l1", "Legacy Subnet"] as const;
@@ -43,18 +47,7 @@ export function Dashboard({ chainData, loading, validatorCounts, icmCounts, onRe
   };
 
   // Sort chains by Mgas/s (highest first)
-  const sortedChainData = [...chainData].sort((a, b) => {
-    if (a.blockData && !b.blockData) return -1;
-    if (!a.blockData && b.blockData) return 1;
-
-    if (a.blockData && b.blockData) {
-      const gasUsedA = parseInt(a.blockData.gasUsed, 16);
-      const gasUsedB = parseInt(b.blockData.gasUsed, 16);
-      return gasUsedB - gasUsedA;
-    }
-
-    return b.lastUpdated - a.lastUpdated;
-  });
+  const sortedChainData = sortChainsByGasUsed(chainData);
 
   // Compute unique categories from active chains
   const availableCategories = useMemo(() => {
@@ -89,43 +82,42 @@ export function Dashboard({ chainData, loading, validatorCounts, icmCounts, onRe
     filteredChainData.length > 0
       ? {
           totalTps: filteredChainData.reduce((sum, chain) => {
-            const oneHourAgo = Math.floor(Date.now() / 1000) - 3600;
+            const oneHourAgo = Math.floor(Date.now() / 1000) - STALENESS_THRESHOLD_SECONDS;
             if (chain.blockData && !chain.loading && !chain.error) {
-              const blockTimestamp = parseInt(chain.blockData.timestamp, 16);
+              const blockTimestamp = parseHexSafe(chain.blockData.timestamp);
               if (blockTimestamp > oneHourAgo) {
-                const tps = chain.blockData.transactions.length / 2;
-                return sum + tps;
+                return sum + calculateTps(chain.blockData.transactions.length);
               }
             }
             return sum;
           }, 0),
           totalGasPerSecond: filteredChainData.reduce((sum, chain) => {
-            const oneHourAgo = Math.floor(Date.now() / 1000) - 3600;
+            const oneHourAgo = Math.floor(Date.now() / 1000) - STALENESS_THRESHOLD_SECONDS;
             if (chain.blockData && !chain.loading && !chain.error) {
-              const blockTimestamp = parseInt(chain.blockData.timestamp, 16);
+              const blockTimestamp = parseHexSafe(chain.blockData.timestamp);
               if (blockTimestamp > oneHourAgo) {
-                const gasUsed = parseInt(chain.blockData.gasUsed, 16);
-                return sum + gasUsed / 2;
+                const gasUsed = parseHexSafe(chain.blockData.gasUsed);
+                return sum + gasUsed / BLOCK_TIME_SECONDS;
               }
             }
             return sum;
           }, 0),
           averageUtilization: (() => {
-            const oneHourAgo = Math.floor(Date.now() / 1000) - 3600;
+            const oneHourAgo = Math.floor(Date.now() / 1000) - STALENESS_THRESHOLD_SECONDS;
             const recentChains = filteredChainData.filter(
               (chain) =>
                 chain.blockData &&
                 !chain.loading &&
                 !chain.error &&
-                parseInt(chain.blockData.timestamp, 16) > oneHourAgo,
+                parseHexSafe(chain.blockData.timestamp) > oneHourAgo,
             );
 
             if (recentChains.length === 0) return 0;
 
             return (
               recentChains.reduce((sum, chain) => {
-                const gasUsed = parseInt(chain.blockData!.gasUsed, 16);
-                const gasLimit = parseInt(chain.blockData!.gasLimit, 16);
+                const gasUsed = parseHexSafe(chain.blockData!.gasUsed);
+                const gasLimit = parseHexSafe(chain.blockData!.gasLimit);
                 return sum + gasUsed / gasLimit;
               }, 0) / recentChains.length
             );
@@ -150,6 +142,11 @@ export function Dashboard({ chainData, loading, validatorCounts, icmCounts, onRe
       return next;
     });
   };
+
+  const errorCount = useMemo(
+    () => chainData.filter((c) => c.error && !c.loading).length,
+    [chainData],
+  );
 
   return (
     <div className="app">
@@ -176,6 +173,11 @@ export function Dashboard({ chainData, loading, validatorCounts, icmCounts, onRe
             loading={loading}
             chainData={filteredChainData}
           />
+          {errorCount > 0 && (
+            <div className="error-count">
+              {errorCount} chain{errorCount > 1 ? "s" : ""} unreachable
+            </div>
+          )}
         </div>
 
         {/* Filters */}

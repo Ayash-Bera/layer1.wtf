@@ -3,6 +3,10 @@ import { useState, useEffect } from 'react'
 import { Dashboard } from './components/Dashboard'
 import { ChainBlockData } from './types'
 import { getActiveChains } from './data/chains'
+import { RPC_FETCH_TIMEOUT_MS, POLLING_INTERVAL_MS, BACKEND_REFRESH_INTERVAL_MS, TPS_HISTORY_MAX_LENGTH } from './constants'
+import { sortChainsByBlockNumber } from './utils/sorting'
+import { isValidBlockData } from './utils/validation'
+import { calculateTps } from './utils/metrics'
 import CRTEffect from 'vault66-crt-effect'
 import 'vault66-crt-effect/dist/vault66-crt-effect.css'
 
@@ -62,7 +66,7 @@ function App() {
 
       // Create an AbortController for timeout
       const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 second timeout
+      const timeoutId = setTimeout(() => controller.abort(), RPC_FETCH_TIMEOUT_MS)
 
       const response = await fetch(rpcUrl, {
         method: 'POST',
@@ -90,6 +94,10 @@ function App() {
 
       if (data.error) {
         throw new Error(`RPC Error for ${chainName}: ${data.error.message || 'Unknown RPC error'}`)
+      }
+
+      if (!isValidBlockData(data.result)) {
+        throw new Error(`Invalid block data for ${chainName}: missing required fields`)
       }
 
       return data.result
@@ -131,7 +139,7 @@ function App() {
         // Update the working array
         const chainIndex = workingChainData.findIndex(item => item.blockchainId === chain.evmChainId)
         if (chainIndex !== -1) {
-          const tps = blockData.transactions.length / 2
+          const tps = calculateTps(blockData.transactions.length)
           const existingHistory = workingChainData[chainIndex].tpsHistory || []
           workingChainData[chainIndex] = {
             ...workingChainData[chainIndex],
@@ -139,17 +147,19 @@ function App() {
             loading: false,
             error: null,
             lastUpdated: Date.now(),
-            tpsHistory: [...existingHistory.slice(-19), tps]
+            tpsHistory: [...existingHistory.slice(-(TPS_HISTORY_MAX_LENGTH - 1)), tps]
           }
         }
       } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : `Unknown error for ${chain.chainName}`
+        console.error(`[RPC] ${chain.chainName}:`, errorMessage)
         // Update the working array with error
         const chainIndex = workingChainData.findIndex(item => item.blockchainId === chain.evmChainId)
         if (chainIndex !== -1) {
           workingChainData[chainIndex] = {
             ...workingChainData[chainIndex],
             loading: false,
-            error: err instanceof Error ? err.message : `Unknown error for ${chain.chainName}`,
+            error: errorMessage,
             lastUpdated: Date.now()
           }
         }
@@ -160,27 +170,10 @@ function App() {
     await Promise.allSettled(promises)
 
     // Sort the complete data by block number (highest to lowest)
-    const sortedChainData = workingChainData.sort((a, b) => {
-      const aHasData = a.blockData && !a.loading && !a.error
-      const bHasData = b.blockData && !b.loading && !b.error
-
-      // Chains with data come first
-      if (aHasData && !bHasData) return -1
-      if (!aHasData && bHasData) return 1
-
-      // If both have data, sort by block number (highest first)
-      if (aHasData && bHasData) {
-        const blockNumberA = parseInt(a.blockData!.number, 16)
-        const blockNumberB = parseInt(b.blockData!.number, 16)
-        return blockNumberB - blockNumberA
-      }
-
-      // For chains without data, sort alphabetically
-      return a.chainName.localeCompare(b.chainName)
-    })
+    sortChainsByBlockNumber(workingChainData)
 
     // Update state with sorted data
-    setChainData(sortedChainData)
+    setChainData(workingChainData)
     setAllDataFetched(true)
   }
 
@@ -198,7 +191,9 @@ function App() {
         const blockData = await fetchChainData(chain.rpcUrl!, chain.chainName, chain.evmChainId!)
         updates.set(chain.evmChainId!, { blockData })
       } catch (err) {
-        updates.set(chain.evmChainId!, { error: err instanceof Error ? err.message : `Unknown error for ${chain.chainName}` })
+        const errorMessage = err instanceof Error ? err.message : `Unknown error for ${chain.chainName}`
+        console.error(`[RPC] ${chain.chainName}:`, errorMessage)
+        updates.set(chain.evmChainId!, { error: errorMessage })
       }
     })
 
@@ -212,7 +207,7 @@ function App() {
         const chainIndex = tempChainData.findIndex(item => item.blockchainId === evmChainId)
         if (chainIndex !== -1) {
           if (update.blockData) {
-            const tps = update.blockData.transactions.length / 2
+            const tps = calculateTps(update.blockData.transactions.length)
             const existingHistory = tempChainData[chainIndex].tpsHistory || []
             tempChainData[chainIndex] = {
               ...tempChainData[chainIndex],
@@ -220,7 +215,7 @@ function App() {
               loading: false,
               error: null,
               lastUpdated: Date.now(),
-              tpsHistory: [...existingHistory.slice(-19), tps]
+              tpsHistory: [...existingHistory.slice(-(TPS_HISTORY_MAX_LENGTH - 1)), tps]
             }
           } else if (update.error) {
             tempChainData[chainIndex] = {
@@ -234,21 +229,7 @@ function App() {
       })
 
       // Re-sort after updates to maintain proper order
-      return tempChainData.sort((a, b) => {
-        const aHasData = a.blockData && !a.loading && !a.error
-        const bHasData = b.blockData && !b.loading && !b.error
-
-        if (aHasData && !bHasData) return -1
-        if (!aHasData && bHasData) return 1
-
-        if (aHasData && bHasData) {
-          const blockNumberA = parseInt(a.blockData!.number, 16)
-          const blockNumberB = parseInt(b.blockData!.number, 16)
-          return blockNumberB - blockNumberA
-        }
-
-        return a.chainName.localeCompare(b.chainName)
-      })
+      return sortChainsByBlockNumber(tempChainData)
     })
   }
 
@@ -261,10 +242,10 @@ function App() {
       if (allDataFetched) {
         updateChainData()
       }
-    }, 5000)
+    }, POLLING_INTERVAL_MS)
 
     // Refresh backend data every 5 minutes
-    const backendInterval = setInterval(fetchBackendData, 300000)
+    const backendInterval = setInterval(fetchBackendData, BACKEND_REFRESH_INTERVAL_MS)
 
     return () => {
       clearInterval(interval)

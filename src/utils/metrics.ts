@@ -1,16 +1,20 @@
 import { BlockData, ChainMetrics } from '../types'
+import { BLOCK_TIME_SECONDS } from '../constants'
+import { parseHexSafe } from './validation'
+
+export function calculateTps(txCount: number): number {
+  return txCount / BLOCK_TIME_SECONDS
+}
 
 export function calculateMetrics(blockData: BlockData): ChainMetrics {
-  const blockNumber = parseInt(blockData.number, 16)
-  const gasUsed = parseInt(blockData.gasUsed, 16)
-  const gasLimit = parseInt(blockData.gasLimit, 16)
-  const blockSize = parseInt(blockData.size, 16)
-  const timestamp = parseInt(blockData.timestamp, 16)
+  const blockNumber = parseHexSafe(blockData.number)
+  const gasUsed = parseHexSafe(blockData.gasUsed)
+  const gasLimit = parseHexSafe(blockData.gasLimit)
+  const blockSize = parseHexSafe(blockData.size)
+  const timestamp = parseHexSafe(blockData.timestamp)
   const transactionCount = blockData.transactions.length
-  
-  // Assuming 2 second block time for Avalanche
-  const blockTime = 2
-  const tps = transactionCount / blockTime
+
+  const tps = calculateTps(transactionCount)
   const gasUtilization = gasUsed / gasLimit
 
   return {

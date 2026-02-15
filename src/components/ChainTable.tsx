@@ -3,6 +3,9 @@ import { ChainBlockData } from '../types'
 import { AnimatedCounter } from './AnimatedCounter'
 import { ChainDetailPopup } from './ChainDetailPopup'
 import { chains, Chain } from '../data/chains'
+import { BLOCK_TIME_SECONDS } from '../constants'
+import { calculateTps } from '../utils/metrics'
+import { parseHexSafe } from '../utils/validation'
 import Sparkline from 'sparklines'
 
 interface SparklineChartProps {
@@ -214,7 +217,7 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, v
   let highestTps = 0
   chainData.forEach(chain => {
     if (chain.blockData && !chain.loading && !chain.error) {
-      const tps = chain.blockData.transactions.length / 2
+      const tps = calculateTps(chain.blockData.transactions.length)
       if (tps > highestTps) {
         highestTps = tps
         highestTpsId = chain.blockchainId
@@ -304,12 +307,12 @@ export const ChainTable = React.memo(function ChainTable({ chainData, loading, v
           )
         }
 
-        const blockNumber = parseInt(chain.blockData.number, 16)
-        const gasUsed = parseInt(chain.blockData.gasUsed, 16)
-        const blockSize = parseInt(chain.blockData.size, 16)
-        const tps = chain.blockData.transactions.length / 2
-        const mgasPerSecond = (gasUsed / 1000000) / 2
-        const kbPerSecond = (blockSize / 1024) / 2
+        const blockNumber = parseHexSafe(chain.blockData.number)
+        const gasUsed = parseHexSafe(chain.blockData.gasUsed)
+        const blockSize = parseHexSafe(chain.blockData.size)
+        const tps = calculateTps(chain.blockData.transactions.length)
+        const mgasPerSecond = (gasUsed / 1000000) / BLOCK_TIME_SECONDS
+        const kbPerSecond = (blockSize / 1024) / BLOCK_TIME_SECONDS
 
         return (
           <ChainRow
